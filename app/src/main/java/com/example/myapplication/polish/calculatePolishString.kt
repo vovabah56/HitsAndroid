@@ -1,13 +1,11 @@
 package com.example.myapplication.polish
 
-
 import java.lang.Exception
-
+import java.util.Stack
 
 fun calculatePolishString(polishString: String, variables: MutableMap<String, Int>): Int {
-    val stack = Stack()
+    val stack = Stack<Int>()
     var localPolishString = polishString
-
 
     val regex = Regex("[a-zA-Z_][a-zA-Z_0-9]*")
     val matches = regex.findAll(polishString)
@@ -18,46 +16,89 @@ fun calculatePolishString(polishString: String, variables: MutableMap<String, In
         }
     }
 
-
     while (localPolishString.isNotEmpty()) {
         val expr = localPolishString.substringBefore(',')
         if (expr.matches(Regex("[a-zA-Z_][\\w]*"))) {
-            stack.ordinaryPush(variables[expr])
+            stack.push(variables[expr] ?: 0)
         } else {
             if (expr.matches(Regex("[1-9][\\d]*|0"))) {
                 try {
-                    stack.ordinaryPush(expr.toInt())
+                    stack.push(expr.toInt())
                 } catch (e: Exception) {
-                    stack.ordinaryPush(0)
+                    stack.push(0)
                 }
             } else {
-                if(stack.isEmpty2()){
-                    print("#Invalid expression: stack")
-                    return 0
-                }
-                val second = stack.ordinaryPop()
-                if(stack.isEmpty2()){
-                    print("#Invalid expression: stack")
-                    return 0
-                }
-                val first = stack.ordinaryPop()
                 when (expr) {
-                    "+" -> stack.ordinaryPush(first + second)
-                    "-" -> stack.ordinaryPush(first - second)
-                    "*" -> stack.ordinaryPush(first * second)
-                    "/" -> {
-                        if(second == 0) {
-                            print("#Devision by 0")
+                    "+" -> {
+                        if (stack.size < 2) {
+                            print("#Invalid expression: stack")
                             return 0
                         }
-                        stack.ordinaryPush(first / second)
+                        val second = stack.pop()
+                        val first = stack.pop()
+                        stack.push(first + second)
+                    }
+                    "-" -> {
+                        if (stack.size < 2) {
+                            print("#Invalid expression: stack")
+                            return 0
+                        }
+                        val second = stack.pop()
+                        val first = stack.pop()
+                        stack.push(first - second)
+                    }
+                    "*" -> {
+                        if (stack.size < 2) {
+                            print("#Invalid expression: stack")
+                            return 0
+                        }
+                        val second = stack.pop()
+                        val first = stack.pop()
+                        stack.push(first * second)
+                    }
+                    "/" -> {
+                        if (stack.size < 2) {
+                            print("#Invalid expression: stack")
+                            return 0
+                        }
+                        val second = stack.pop()
+                        val first = stack.pop()
+                        if (second == 0) {
+                            print("#Division by 0")
+                            return 0
+                        }
+                        stack.push(first / second)
                     }
                     "%" -> {
-                        if(second == 0) {
-                            print("#Devision by 0")
+                        if (stack.size < 2) {
+                            print("#Invalid expression: stack")
                             return 0
                         }
-                        stack.ordinaryPush(first % second)
+                        val second = stack.pop()
+                        val first = stack.pop()
+                        if (second == 0) {
+                            print("#Division by 0")
+                            return 0
+                        }
+                        stack.push(first % second)
+                    }
+                    "(" -> {
+                        stack.push(-1)
+                    }
+                    ")" -> {
+                        if (stack.size < 3) {
+                            print("#Invalid expression: stack")
+                            return 0
+                        }
+                        val third = stack.pop()
+                        if (third != -1) {
+                            print("#Invalid expression: stack")
+                            return 0
+                        }
+                        val second = stack.pop()
+                        val first = stack.pop()
+                        val result = calculatePolishString(localPolishString.substringAfter("(").substringBefore(")"), variables)
+                        stack.push(result)
                     }
                 }
             }
@@ -65,5 +106,5 @@ fun calculatePolishString(polishString: String, variables: MutableMap<String, In
         localPolishString = localPolishString.slice(expr.length + 1 until localPolishString.length)
     }
 
-    return stack.ordinaryPop()
+    return stack.pop()
 }

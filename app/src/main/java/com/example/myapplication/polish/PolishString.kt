@@ -1,63 +1,55 @@
 package com.example.myapplication.polish
 
-import android.util.Log
 
 class PolishString constructor(expression: String, variables: MutableMap<String, Int>) {
     var expression: String
-    var isExprCorrect: Boolean = true
+    var isExpressionCorrect: Boolean = true
 
     init {
         this.expression = expression.filter { !it.isWhitespace() }
 
-        this.expression = CreateReversePolish(this.expression)
+        this.expression = turnToReversePolish(this.expression)
     }
 
-
-
-    private fun CreateReversePolish(str: String): String {
+    private fun turnToReversePolish(str: String): String {
         var reversePolish = ""
         val stack = Stack()
 
-        val letterArr = arrayListOf<Char>()
+        val letterArray = arrayListOf<Char>()
         for (i in 48..57)
-            letterArr.add(Char(i))
+            letterArray.add(Char(i))
         for (i in 65..90)
-            letterArr.add(Char(i))
+            letterArray.add(Char(i))
         for (i in 97..122)
-            letterArr.add(Char(i))
-        letterArr.add(Char(95))
+            letterArray.add(Char(i))
+        letterArray.add(Char(95))
 
         for (char in str) {
-            if (char in letterArr) {
+            if (char in letterArray) {
                 reversePolish += char
             } else if(reversePolish.isNotEmpty()){
                 when (char) {
-                    '+', '-', '*', '/', '%', '(' -> {
-                        if (reversePolish.last() in letterArr && reversePolish.last() != ',') {
+                    '+', '-', '*', '/', '%', '(',  -> {
+                        if (reversePolish.last() in letterArray)
                             reversePolish += ','
-                            Log.d("rePolish", "$reversePolish")
-                        }
                         reversePolish += stack.push(char)
                     }
                     ')' -> {
-                        if (reversePolish.last() in letterArr && reversePolish.last() != ',')
+                        if (reversePolish.last() in letterArray)
                             reversePolish += ','
                         reversePolish += stack.closeBracket()
                     }
 
-                    else -> this.isExprCorrect = false
+                    else -> this.isExpressionCorrect = false
                 }
             }
         }
-
         while (!stack.isEmpty()) {
-            if(reversePolish.last() != ','){
-                reversePolish += ','
-            }
 
+            reversePolish += ','
             reversePolish += stack.arrayOfChars.removeAt(stack.arrayOfChars.size - 1)
         }
-        Log.d("polish", "$reversePolish")
-        return "$reversePolish"
+
+        return "$reversePolish,"
     }
 }
