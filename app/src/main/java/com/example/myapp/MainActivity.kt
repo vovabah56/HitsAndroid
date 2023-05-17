@@ -163,7 +163,12 @@ fun CodeScreenButtons(blocksList: MutableList<CodeBlock>) {
         ) {
             Icon(Icons.Default.Add, contentDescription = "Добавить блок")
         }
-        IconButton(onClick = {}, Modifier.padding(8.dp)) {
+        IconButton(onClick = {
+                             for (block in blocksList) {
+                                 Log.d("Block print", "$block")
+                             }
+//                             Log.d("BLOCKS PRINT", "${blocksList.forEach()}")
+        }, Modifier.padding(8.dp)) {
             Icon(Icons.Default.PlayArrow, contentDescription = "Запустить")
         }
     }
