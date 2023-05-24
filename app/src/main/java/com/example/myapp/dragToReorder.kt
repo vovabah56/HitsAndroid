@@ -1,5 +1,7 @@
 package com.example.myapp
 
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -10,8 +12,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.input.pointer.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
 import com.example.myapp.model.CodeBlock
+import com.example.myapp.model.VarBlock
 import com.example.myapp.model.SlideState
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -30,6 +34,7 @@ fun Modifier.dragToReorder(
     onStartDrag: () -> Unit,
     onStopDrag: (currentIndex: Int, destinationIndex: Int) -> Unit,
 ): Modifier = composed {
+    val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
     val offsetX = remember { Animatable(0f) }
     val offsetY = remember { Animatable(0f) }
     pointerInput(Unit) {
@@ -42,6 +47,7 @@ fun Modifier.dragToReorder(
             var listOffset = 0
 
             val onDragStart = {
+                vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
                 // Interrupt any ongoing animation of other items.
                 launch {
                     offsetX.stop()
@@ -65,21 +71,37 @@ fun Modifier.dragToReorder(
                         offsetToSlide,
                         previousNumberOfItems
                     )
+                    Log.i("DragToReorder", "numberOfItems: $numberOfItems")
 
                     if (previousNumberOfItems > numberOfItems) {
+                        Log.i(
+                            "DragToReorder",
+                            "previousNumberOfItems $previousNumberOfItems > numberOfItems $numberOfItems"
+                        )
                         updateSlideState(
                             blocksList[blockIndex + previousNumberOfItems * offsetSign],
                             SlideState.NONE
                         )
                     } else if (numberOfItems != 0) {
                         try {
+                            Log.i(
+                                "DragToReorder",
+                                "Item is inside, numberOfItems: $numberOfItems, offsetSign: $offsetSign, blockIndex: $blockIndex, ind: ${blockIndex + numberOfItems * offsetSign}"
+                            )
                             updateSlideState(
                                 blocksList[blockIndex + numberOfItems * offsetSign],
-                                if (offsetSign == 1) SlideState.UP else SlideState.DOWN
+                                if (offsetSign == 1) {
+                                    SlideState.UP
+                                } else {
+                                    SlideState.DOWN
+                                }
                             )
                         } catch (e: IndexOutOfBoundsException) {
                             numberOfItems = previousNumberOfItems
-                            Log.i("DragToReorder", "Item is outside or at the edge")
+                            Log.i(
+                                "DragToReorder",
+                                "Item is outside or at the edge, numberOfItems: $numberOfItems"
+                            )
                         }
                     }
                     listOffset = numberOfItems * offsetSign
@@ -92,8 +114,11 @@ fun Modifier.dragToReorder(
                     offsetX.animateTo(0f)
                 }
                 launch {
+                    Log.i("LOG", "DragEnd")
+                    vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
                     offsetY.animateTo(itemHeight * numberOfItems * offsetY.value.sign)
                     onStopDrag(blockIndex, blockIndex + listOffset)
+                    Log.i("LOG", "DragEnd end")
                 }
             }
             if (isDraggedAfterLongPress)
