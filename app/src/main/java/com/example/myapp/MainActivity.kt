@@ -34,12 +34,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.myapp.blocks.BlockPrint
-import com.example.myapp.model.CodeBlock
+import com.example.myapp.model.Block
+import com.example.myapp.model.DoWhileBlock
+import com.example.myapp.model.ElseBlock
+import com.example.myapp.model.ElseIfBlock
+import com.example.myapp.model.ForBlock
 import com.example.myapp.model.IfBlock
+import com.example.myapp.model.InputBlock
 import com.example.myapp.model.PrintBlock
 import com.example.myapp.model.SlideState
 import com.example.myapp.model.VarBlock
+import com.example.myapp.model.WhileBlock
 
 
 class MainActivity : ComponentActivity() {
@@ -55,18 +60,20 @@ class MainActivity : ComponentActivity() {
 
 
 val startBlocks = arrayOf(
-    CodeBlock(0, VarBlock("", "")),
-    CodeBlock(0, PrintBlock("")),
-//    CodeBlock(1, PrintBlock("")),
+    Block(0, VarBlock("", "")),
+//    Block(2, VarBlock("", "")),
+//    Block(3, VarBlock("", "")),
+//    Block(0, PrintBlock("")),
+//    Block(4, PrintBlock("")),
 //    CodeBlock(2, PrintBlock(""))
 )
 
 @ExperimentalAnimationApi
 @Composable
 fun Home() {
-    val blocksList: MutableList<CodeBlock> = remember { mutableStateListOf(*startBlocks) }
+    val blocksList: MutableList<Block> = remember { mutableStateListOf(*startBlocks) }
     val slideStates = remember {
-        mutableStateMapOf<CodeBlock, SlideState>().apply {
+        mutableStateMapOf<Block, SlideState>().apply {
             blocksList.map { blockList ->
                 blockList to SlideState.NONE
             }.toMap().also {
@@ -97,9 +104,9 @@ fun Home() {
 @ExperimentalAnimationApi
 @Composable
 fun ListView(
-    blocksList: MutableList<CodeBlock>,
-    slideStates: Map<CodeBlock, SlideState>,
-    updateSlideState: (shoesArticle: CodeBlock, slideState: SlideState) -> Unit,
+    blocksList: MutableList<Block>,
+    slideStates: Map<Block, SlideState>,
+    updateSlideState: (shoesArticle: Block, slideState: SlideState) -> Unit,
     updateItemPosition: (currentIndex: Int, destinationIndex: Int) -> Unit
 ) {
     val lazyListState = rememberLazyListState()
@@ -114,24 +121,13 @@ fun ListView(
             if (block != null) {
                 key(block) {
                     val slideState = slideStates[block] ?: SlideState.NONE
-                    when (block.blockType) {
-
-                        is VarBlock -> VariableBlock(
-                            block = block,
-                            slideState = slideState,
-                            blocksList = blocksList,
-                            updateSlideState = updateSlideState,
-                            updateItemPosition = updateItemPosition
-                        )
-
-                        is PrintBlock -> BlockPrint(
-                            block = block,
-                            slideState = slideState,
-                            blocksList = blocksList,
-                            updateSlideState = updateSlideState,
-                            updateItemPosition = updateItemPosition
-                        )
-                    }
+                    BlockView(
+                        block = block,
+                        slideState = slideState,
+                        blocksList = blocksList,
+                        updateSlideState = updateSlideState,
+                        updateItemPosition = updateItemPosition
+                    )
 
 
 //                    }
@@ -152,7 +148,7 @@ fun ListView(
 
 // todo fix add block with lastId ???A?DA?D?
 @Composable
-fun CodeScreenButtons(blocksList: MutableList<CodeBlock>) {
+fun CodeScreenButtons(blocksList: MutableList<Block>) {
     var lastId = 0
     val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
     var expanded by remember { mutableStateOf(false) }
@@ -162,14 +158,6 @@ fun CodeScreenButtons(blocksList: MutableList<CodeBlock>) {
                 onClick = {
                     expanded = !expanded
                     vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
-//                val newShoesArticles = mutableListOf<CodeBlock>()
-//                CodeBlock.ID += 1
-//                blocksList.add(CodeBlock(id=CodeBlock.ID))
-//                    if (blocksList.size > 0) {
-//                        lastId = blocksList.last().id + 1
-//                    }
-//                    blocksList.add(CodeBlock(lastId, "", 0))
-//                    Log.d("LOG", "Add block clicked $lastId")
                 }, Modifier.padding(8.dp)
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Добавить блок")
@@ -185,7 +173,7 @@ fun CodeScreenButtons(blocksList: MutableList<CodeBlock>) {
                         if (blocksList.size > 0) {
                             lastId = blocksList.last().id + 1
                         }
-                        blocksList.add(CodeBlock(lastId, VarBlock("", "")))
+                        blocksList.add(Block(lastId, VarBlock("", "")))
                     }
                 )
                 DropdownMenuItem(
@@ -195,44 +183,61 @@ fun CodeScreenButtons(blocksList: MutableList<CodeBlock>) {
                         if (blocksList.size > 0) {
                             lastId = blocksList.last().id + 1
                         }
-                        blocksList.add(CodeBlock(lastId, PrintBlock("")))
+                        blocksList.add(Block(lastId, PrintBlock("")))
                     }
                 )
+                DropdownMenuItem(text = { Text("Input") }, onClick = {
+                    vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
+                    if (blocksList.size > 0) {
+                        lastId = blocksList.last().id + 1
+                    }
+                    blocksList.add(Block(lastId, InputBlock("")))
+                })
                 DropdownMenuItem(text = { Text("If block") }, onClick = {
                     vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
                     if (blocksList.size > 0) {
                         lastId = blocksList.last().id + 1
                     }
-                    blocksList.add(CodeBlock(lastId, IfBlock("", mutableListOf())))
+                    blocksList.add(Block(lastId, IfBlock("", mutableListOf())))
+                })
+                DropdownMenuItem(text = { Text("Elif block") }, onClick = {
+                    vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
+                    if (blocksList.size > 0) {
+                        lastId = blocksList.last().id + 1
+                    }
+                    blocksList.add(Block(lastId, ElseIfBlock("", mutableListOf())))
+                })
+                DropdownMenuItem(text = { Text("Else block") }, onClick = {
+                    vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
+                    if (blocksList.size > 0) {
+                        lastId = blocksList.last().id + 1
+                    }
+                    blocksList.add(Block(lastId, ElseBlock(mutableListOf())))
+                })
+                DropdownMenuItem(text = { Text("While") }, onClick = {
+                    vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
+                    if (blocksList.size > 0) {
+                        lastId = blocksList.last().id + 1
+                    }
+                    blocksList.add(Block(lastId, WhileBlock("", mutableListOf())))
+                })
+                DropdownMenuItem(text = { Text("Do While") }, onClick = {
+                    vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
+                    if (blocksList.size > 0) {
+                        lastId = blocksList.last().id + 1
+                    }
+                    blocksList.add(Block(lastId, DoWhileBlock("", mutableListOf())))
+                })
+                DropdownMenuItem(text = { Text("For") }, onClick = {
+                    vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
+                    if (blocksList.size > 0) {
+                        lastId = blocksList.last().id + 1
+                    }
+                    blocksList.add(Block(lastId, ForBlock("", "", mutableListOf())))
                 })
             }
         }
 
-//        Box(
-//            modifier = Modifier.fillMaxWidth()
-//                .wrapContentSize(Alignment.TopEnd)
-//        ) {
-//            IconButton(onClick = { expanded = !expanded }) {
-//                Icon(
-//                    imageVector = Icons.Default.MoreVert,
-//                    contentDescription = "More"
-//                )
-//            }
-//
-//            DropdownMenu(
-//                expanded = expanded,
-//                onDismissRequest = { expanded = false }
-//            ) {
-//                DropdownMenuItem(
-//                    text = { Text("Load") },
-//                    onClick = { Toast.makeText(context, "Load", Toast.LENGTH_SHORT).show() }
-//                )
-//                DropdownMenuItem(
-//                    text = { Text("Save") },
-//                    onClick = { Toast.makeText(context, "Save", Toast.LENGTH_SHORT).show() }
-//                )
-//            }
-//        }
         IconButton(onClick = {
             for (block in blocksList) {
                 Log.d("Block print", "$block")

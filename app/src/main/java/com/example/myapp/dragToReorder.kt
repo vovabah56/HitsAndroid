@@ -14,8 +14,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
-import com.example.myapp.model.CodeBlock
-import com.example.myapp.model.VarBlock
+import com.example.myapp.model.Block
 import com.example.myapp.model.SlideState
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -26,10 +25,10 @@ import kotlin.math.sign
 //https://developersbreach.com/drag-to-reorder-compose/
 
 fun Modifier.dragToReorder(
-    block: CodeBlock,
-    blocksList: MutableList<CodeBlock>,
+    block: Block,
+    blocksList: MutableList<Block>,
     itemHeight: Int,
-    updateSlideState: (blockList: CodeBlock, slideState: SlideState) -> Unit,
+    updateSlideState: (blockList: Block, slideState: SlideState) -> Unit,
     isDraggedAfterLongPress: Boolean,
     onStartDrag: () -> Unit,
     onStopDrag: (currentIndex: Int, destinationIndex: Int) -> Unit,
