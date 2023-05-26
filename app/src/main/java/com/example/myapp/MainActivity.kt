@@ -104,6 +104,7 @@ fun MainScreen() {
     val navigationBarItems = remember { NavigationBarItems.values() }
     val blocksList: MutableList<Block> = remember { mutableStateListOf(*startBlocks) }
     val logList: MutableList<String> = remember { mutableStateListOf("") }
+    val errorList: MutableList<String> = remember { mutableStateListOf("") }
     var selectedIndex by remember { mutableStateOf(0) }
 
 
@@ -144,7 +145,7 @@ fun MainScreen() {
             exit = fadeOut(animationSpec = tween(300)),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Home(blocksList, logList)
+            Home(blocksList, logList, errorList)
         }
         AnimatedVisibility(
             visible = selectedIndex == 1,
@@ -169,7 +170,11 @@ val startBlocks = arrayOf(
 
 @ExperimentalAnimationApi
 @Composable
-fun Home(blocksList: MutableList<Block>, logList: MutableList<String>) {
+fun Home(
+    blocksList: MutableList<Block>,
+    logList: MutableList<String>,
+    errorList: MutableList<String>
+) {
 
     val slideStates = remember {
         mutableStateMapOf<Block, SlideState>().apply {
@@ -180,7 +185,7 @@ fun Home(blocksList: MutableList<Block>, logList: MutableList<String>) {
             }
         }
     }
-    CodeScreenButtons(blocksList, logList)
+    CodeScreenButtons(blocksList, logList, errorList)
     ListView(
         blocksList = blocksList,
         slideStates = slideStates,
@@ -239,7 +244,11 @@ fun ListView(
 }
 
 @Composable
-fun CodeScreenButtons(blocksList: MutableList<Block>, logList: MutableList<String>) {
+fun CodeScreenButtons(
+    blocksList: MutableList<Block>,
+    logList: MutableList<String>,
+    errorList: MutableList<String>
+) {
     var lastId = 0
     val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
     var expanded by remember { mutableStateOf(false) }
@@ -282,7 +291,7 @@ fun CodeScreenButtons(blocksList: MutableList<Block>, logList: MutableList<Strin
             }
             var variables = mutableMapOf<String, Int>()
             var arrays = mutableMapOf<String, MutableList<Int>>()
-            interpretator(blocksList, variables, arrays, logList)
+            interpretator(blocksList, variables, arrays, logList, errorList)
 //                             Log.d("BLOCKS PRINT", "${blocksList.forEach()}")
         }, Modifier.padding(8.dp)) {
             Icon(Icons.Default.PlayArrow, contentDescription = "Запустить")
