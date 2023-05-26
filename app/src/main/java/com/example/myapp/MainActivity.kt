@@ -144,7 +144,7 @@ fun MainScreen() {
             exit = fadeOut(animationSpec = tween(300)),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Home(blocksList)
+            Home(blocksList, logList)
         }
         AnimatedVisibility(
             visible = selectedIndex == 1,
@@ -169,7 +169,7 @@ val startBlocks = arrayOf(
 
 @ExperimentalAnimationApi
 @Composable
-fun Home(blocksList: MutableList<Block>) {
+fun Home(blocksList: MutableList<Block>, logList: MutableList<String>) {
 
     val slideStates = remember {
         mutableStateMapOf<Block, SlideState>().apply {
@@ -180,7 +180,7 @@ fun Home(blocksList: MutableList<Block>) {
             }
         }
     }
-    CodeScreenButtons(blocksList)
+    CodeScreenButtons(blocksList, logList)
     ListView(
         blocksList = blocksList,
         slideStates = slideStates,
@@ -239,7 +239,7 @@ fun ListView(
 }
 
 @Composable
-fun CodeScreenButtons(blocksList: MutableList<Block>) {
+fun CodeScreenButtons(blocksList: MutableList<Block>, logList: MutableList<String>) {
     var lastId = 0
     val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
     var expanded by remember { mutableStateOf(false) }
@@ -282,8 +282,7 @@ fun CodeScreenButtons(blocksList: MutableList<Block>) {
             }
             var variables = mutableMapOf<String, Int>()
             var arrays = mutableMapOf<String, MutableList<Int>>()
-            var cons = mutableListOf<String>()
-            interpretator(blocksList, variables, arrays, cons)
+            interpretator(blocksList, variables, arrays, logList)
 //                             Log.d("BLOCKS PRINT", "${blocksList.forEach()}")
         }, Modifier.padding(8.dp)) {
             Icon(Icons.Default.PlayArrow, contentDescription = "Запустить")
