@@ -65,6 +65,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.myapp.blocks.BlockView
+import com.example.myapp.interpretator.interpretator
 import com.example.myapp.model.Block
 import com.example.myapp.model.DoWhileBlock
 import com.example.myapp.model.ElseBlock
@@ -279,6 +280,10 @@ fun CodeScreenButtons(blocksList: MutableList<Block>) {
             for (block in blocksList) {
                 Log.d("Block print", "$block")
             }
+            var variables = mutableMapOf<String, Int>()
+            var arrays = mutableMapOf<String, MutableList<Int>>()
+            var cons = mutableListOf<String>()
+            interpretator(blocksList, variables, arrays, cons)
 //                             Log.d("BLOCKS PRINT", "${blocksList.forEach()}")
         }, Modifier.padding(8.dp)) {
             Icon(Icons.Default.PlayArrow, contentDescription = "Запустить")

@@ -1,5 +1,6 @@
 package com.example.myapp.interpretator
 
+import android.util.Log
 import com.example.myapp.model.*
 import com.example.myapplication.polish.PolishString
 import com.example.myapplication.polish.calculatePolishString
@@ -180,5 +181,5 @@ fun varBlock(block: VarBlock, variables: MutableMap<String, Int>, arrays: Mutabl
 
 fun out(block: PrintBlock, variables: MutableMap<String, Int>, arrays: MutableMap<String, MutableList<Int>>, console: MutableList<String>
 ) {
-    println(calculatePolishString(PolishString(block.value, variables, arrays).expression, variables, arrays))
+    Log.d("asas", calculatePolishString(PolishString(block.value, variables, arrays).expression, variables, arrays).toString())
 }
