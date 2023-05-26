@@ -1,6 +1,6 @@
 Mobile interpreter
 
-Проект был разработан на 1 курсе HITS. 7-mod A
+Проект был разработан на 1 курсе HITS. В рамках Android разработки.
 
 Наша команда: 
 <p><a href="https://vk.com/vovabah56">Владимир Бахман</a></p>
