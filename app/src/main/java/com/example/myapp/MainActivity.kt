@@ -81,6 +81,7 @@ import com.exyte.animatednavbar.animation.balltrajectory.Parabolic
 import com.exyte.animatednavbar.animation.indendshape.Height
 import com.exyte.animatednavbar.animation.indendshape.shapeCornerRadius
 import com.exyte.animatednavbar.utils.noRippleClickable
+import kotlin.math.log
 
 
 class MainActivity : ComponentActivity() {
@@ -101,6 +102,7 @@ class MainActivity : ComponentActivity() {
 fun MainScreen() {
     val navigationBarItems = remember { NavigationBarItems.values() }
     val blocksList: MutableList<Block> = remember { mutableStateListOf(*startBlocks) }
+    val logList: MutableList<String> = remember { mutableStateListOf("") }
     var selectedIndex by remember { mutableStateOf(0) }
 
 
@@ -149,7 +151,7 @@ fun MainScreen() {
             exit = fadeOut(animationSpec = tween(300)),
             modifier = Modifier.fillMaxWidth()
         ) {
-            ConsoleScreen()
+            ConsoleScreen(logList)
         }
     }
 }
