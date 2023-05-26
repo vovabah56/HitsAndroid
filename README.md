@@ -29,7 +29,7 @@ Mobile interpreter
  <span><img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/ac770ed9-9c59-41da-b45e-a45aafe875a9" width="220" height="500" style="float: left"> <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/2943b6b5-03db-403e-af36-41f8913c9c39" width="220" height="500" style="float: left"> <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/007dd9c0-4e21-44c4-beb9-900bbc11d985" width="220" height="500" style="float: left"> <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/67d20056-3322-417d-be46-688257ad5c6f" width="220" height="500" style="float: left"></span>
  </div>
  <div>
-<p><a href="https://vk.com/vovabah56">Владимир Бахман</a> <div>Разрабатывал основную логику программы </div></p>
-<p><a href="https://vk.com/cah9d">Александр Дядяшкин</a> <div> Разрабатывал Ui, а так же логику программы</div></p>
-<p><a href="https://vk.com/maksrfu">Максим Киселев</a><div> Сделал польскую строку, а так же занимался логикой программы</div></p>
- </div>
+<p><a href="https://vk.com/vovabah56">Владимир Бахман</a> Разрабатывал основную логику программы(Большую часть)</p>
+<p><a href="https://vk.com/cah9d">Александр Дядяшкин</a>  Разрабатывал Ui, а так же логику программы</p>
+<p><a href="https://vk.com/maksrfu">Максим Киселев</a> Сделал польскую строку, а так же занимался логикой программы</p>
+</div>
