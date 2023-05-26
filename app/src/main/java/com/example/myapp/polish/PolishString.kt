@@ -1,16 +1,16 @@
 package com.example.myapplication.polish
 
-class PolishString constructor(expression: String, variables: MutableMap<String, Int>, arrays: MutableMap<String, MutableList<Int>>) {
+class PolishString constructor(expression: String, variables: MutableMap<String, Int>, arrays: MutableMap<String, MutableList<Int>>,errorConsole: MutableList<String>) {
     var expression: String
     var isExpressionCorrect: Boolean = true
 
     init {
         this.expression = expression.filter { !it.isWhitespace() }
 
-        this.expression = turnToReversePolish(this.expression, variables, arrays)
+        this.expression = turnToReversePolish(this.expression, variables, arrays, errorConsole)
     }
 
-    private fun turnToReversePolish(str: String, variables: MutableMap<String, Int>, arrays: MutableMap<String, MutableList<Int>>): String {
+    private fun turnToReversePolish(str: String, variables: MutableMap<String, Int>, arrays: MutableMap<String, MutableList<Int>>,errorConsole: MutableList<String>): String {
         var reversePolish = ""
         val stack = Stack()
 
@@ -42,6 +42,9 @@ class PolishString constructor(expression: String, variables: MutableMap<String,
             }
         }
 
+        if(strWhithArr.contains("\\[.*\\]".toRegex())){
+            errorConsole.add("Error in the index array in expression")
+        }
         for (char in strWhithArr) {
             if (char in letterArray) {
                 reversePolish += char

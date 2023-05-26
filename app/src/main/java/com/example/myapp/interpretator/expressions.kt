@@ -7,7 +7,8 @@ fun expressionBlock(
     tree: MutableList<String>,
     text: String,
     variables: MutableMap<String, Int>,
-    arrays: MutableMap<String, MutableList<Int>>
+    arrays: MutableMap<String, MutableList<Int>>,
+    errorConsole: MutableList<String>
 ) {
 
     var textExpression = text
@@ -32,8 +33,11 @@ fun expressionBlock(
             }
         }
     }
-
+    if(textExpression.contains("\\[.*\\]".toRegex())){
+        errorConsole.add("Error in the index array")
+    }
     textExpression = strWhithArr
+
 
     //проверка по скобкам
     var checkBrackets = 0
@@ -75,7 +79,7 @@ fun expressionBlock(
         textExpression = "\\)(?<=[0-9a-zA-Z_])".toRegex().replace(textExpression, ")*")
 
         //прогон по польской строке
-        val polString = PolishString(textExpression, variables, arrays)
+        val polString = PolishString(textExpression, variables, arrays,errorConsole)
 
         if (polString.isExpressionCorrect) {
             tree.add(",+".toRegex().replace(polString.expression, ","))

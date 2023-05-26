@@ -4,7 +4,7 @@ package com.example.myapplication.polish
 import java.lang.Exception
 
 
-fun calculatePolishString(polishString: String, variables: MutableMap<String, Int>, arrays: MutableMap<String, MutableList<Int>>): Int {
+fun calculatePolishString(polishString: String, variables: MutableMap<String, Int>, arrays: MutableMap<String, MutableList<Int>>,errorConsole: MutableList<String>): Int {
     val stack = Stack()
     var localPolishString = polishString
 
@@ -13,6 +13,8 @@ fun calculatePolishString(polishString: String, variables: MutableMap<String, In
     val matches = regex.findAll(polishString)
     for (key in matches){
         if (!variables.containsKey(key.value)) {
+            errorConsole.add("#Invalid expression: ${key.value}")
+
             print("#Invalid expression: ${key.value}")
             return 0
         }
@@ -33,11 +35,13 @@ fun calculatePolishString(polishString: String, variables: MutableMap<String, In
             } else {
                 if(stack.isEmpty2()){
                     print("#Invalid expression: stack")
+                    errorConsole.add("#Invalid expression: stack")
                     return 0
                 }
                 val second = stack.ordinaryPop()
                 if(stack.isEmpty2()){
                     print("#Invalid expression: stack")
+                    errorConsole.add("#Invalid expression: stack")
                     return 0
                 }
                 val first = stack.ordinaryPop()
@@ -47,14 +51,14 @@ fun calculatePolishString(polishString: String, variables: MutableMap<String, In
                     "*" -> stack.ordinaryPush(first * second)
                     "/" -> {
                         if(second == 0) {
-                            print("#Devision by 0")
+                            errorConsole.add("#Devision by 0")
                             return 0
                         }
                         stack.ordinaryPush(first / second)
                     }
                     "%" -> {
                         if(second == 0) {
-                            print("#Devision by 0")
+                            errorConsole.add("#Devision by 0")
                             return 0
                         }
                         stack.ordinaryPush(first % second)
