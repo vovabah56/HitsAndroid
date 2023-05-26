@@ -1,9 +1,9 @@
 Mobile interpreter
 
 Наша команда: 
-<span><a href="https://vk.com/vovabah56">Владимир Бахман</a></span>
-<span><a href="https://vk.com/cah9d">Александр Дядяшкин</a></span>
-<span><a href="https://vk.com/maksrfu">Максим Киселев</a></span>
+<p><a href="https://vk.com/vovabah56">Владимир Бахман</a></p>
+<p><a href="https://vk.com/cah9d">Александр Дядяшкин</a></p>
+<p><a href="https://vk.com/maksrfu">Максим Киселев</a></p>
 
 <div>
  <span>Способности нашего интепретатора.</span>
