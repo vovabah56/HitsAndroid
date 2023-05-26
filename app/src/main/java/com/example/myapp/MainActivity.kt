@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.PlayArrow
@@ -34,6 +36,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.myapp.blocks.BlockView
+import com.example.myapp.blocks.ShiftBlockView
 import com.example.myapp.model.Block
 import com.example.myapp.model.DoWhileBlock
 import com.example.myapp.model.ElseBlock
@@ -61,11 +65,8 @@ class MainActivity : ComponentActivity() {
 
 val startBlocks = arrayOf(
     Block(0, VarBlock("", "")),
-//    Block(2, VarBlock("", "")),
-//    Block(3, VarBlock("", "")),
-//    Block(0, PrintBlock("")),
-//    Block(4, PrintBlock("")),
-//    CodeBlock(2, PrintBlock(""))
+    Block(1, PrintBlock("")),
+    Block(2, IfBlock("", mutableListOf()))
 )
 
 @ExperimentalAnimationApi
@@ -100,7 +101,7 @@ fun Home() {
     )
 
 }
-
+//todo select block full screen menu with title
 @ExperimentalAnimationApi
 @Composable
 fun ListView(
@@ -114,7 +115,10 @@ fun ListView(
         state = lazyListState,
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 60.dp),
+            .padding(top = 60.dp)
+            .horizontalScroll(
+                rememberScrollState()
+            ),
     ) {
         items(blocksList.size) { index ->
             val block = blocksList.getOrNull(index)
@@ -128,17 +132,6 @@ fun ListView(
                         updateSlideState = updateSlideState,
                         updateItemPosition = updateItemPosition
                     )
-
-
-//                    }
-
-//                    ListRow(
-//                        block = block,
-//                        slideState = slideState,
-//                        blocksList = blocksList,
-//                        updateSlideState = updateSlideState,
-//                        updateItemPosition = updateItemPosition
-//                    )
                 }
             }
         }
@@ -146,7 +139,6 @@ fun ListView(
 
 }
 
-// todo fix add block with lastId ???A?DA?D?
 @Composable
 fun CodeScreenButtons(blocksList: MutableList<Block>) {
     var lastId = 0
@@ -249,3 +241,5 @@ fun CodeScreenButtons(blocksList: MutableList<Block>) {
     }
 
 }
+
+// сделать в основном листе с тем же id что и у иф вложенные блоки

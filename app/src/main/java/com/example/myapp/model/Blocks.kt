@@ -22,7 +22,7 @@ data class PrintBlock(
 )
 
 data class InputBlock(
-    var name: String
+    var value: String
 )
 
 data class IfBlock(

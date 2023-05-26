@@ -33,7 +33,7 @@ import com.example.myapp.model.PrintBlock
 @ExperimentalAnimationApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun drawElseIfBlock(block: Block, blocksList: MutableList<Block>) {
+fun drawElseIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
     Image(
         painter = painterResource(id = R.drawable.print),
         contentDescription = null,

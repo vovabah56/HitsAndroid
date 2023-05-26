@@ -1,4 +1,4 @@
-package com.example.myapp
+package com.example.myapp.blocks
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateIntAsState
@@ -14,17 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.example.myapp.blocks.drawDoWhileBlock
-import com.example.myapp.blocks.drawElseBlock
-import com.example.myapp.blocks.drawElseIfBlock
-import com.example.myapp.blocks.drawForBlock
-import com.example.myapp.blocks.drawIfBlock
-import com.example.myapp.blocks.drawInputBlock
-import com.example.myapp.blocks.drawPrintBlock
-import com.example.myapp.blocks.drawWhileBlock
+import com.example.myapp.R
+import com.example.myapp.dragToReorder
 import com.example.myapp.model.Block
 import com.example.myapp.model.DoWhileBlock
 import com.example.myapp.model.ElseBlock
@@ -81,39 +76,76 @@ fun BlockView(
             isPlaced.value = false
         }
     }
-    Box(modifier = Modifier
-        .padding(horizontal = 16.dp)
-        .dragToReorder(
-            block,
-            blocksList,
-            itemHeight,
-            updateSlideState,
-            isDraggedAfterLongPress = true,
-            { isDragged.value = true },
-            { cIndex, dIndex ->
-                isDragged.value = false
-                isPlaced.value = true
-                currentIndex.value = cIndex
-                destinationIndex.value = dIndex
-            }
-        )
-        .offset { IntOffset(0, verticalTranslation) }
-        .zIndex(zIndex),
-        contentAlignment = Alignment.CenterStart
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 16.dp)
+            .dragToReorder(
+                block,
+                blocksList,
+                itemHeight,
+                updateSlideState,
+                isDraggedAfterLongPress = true,
+                { isDragged.value = true },
+                { cIndex, dIndex ->
+                    isDragged.value = false
+                    isPlaced.value = true
+                    currentIndex.value = cIndex
+                    destinationIndex.value = dIndex
+                }
+            )
+            .offset { IntOffset(0, verticalTranslation) }
+            .zIndex(zIndex),
 
-    ) {
+        ) {
         // todo write all draw blocks
         when (block.blockType) {
-            is VarBlock -> drawVariableBlock(block = block, blocksList = blocksList)
-            is PrintBlock -> drawPrintBlock(block = block, blocksList = blocksList)
-            is IfBlock -> drawIfBlock(block = block, blocksList = blocksList)
-            is ElseBlock -> drawElseBlock(block = block, blocksList = blocksList)
-            is ElseIfBlock -> drawElseIfBlock(block = block, blocksList = blocksList)
-            is WhileBlock -> drawWhileBlock(block = block, blocksList = blocksList)
-            is ForBlock -> drawForBlock(block = block, blocksList = blocksList)
-            is InputBlock -> drawInputBlock(block = block, blocksList = blocksList)
-            is DoWhileBlock -> drawDoWhileBlock(block = block, blocksList = blocksList)
+            is VarBlock -> drawVariableBlock(block = block, blocksList = blocksList, false)
+            is PrintBlock -> drawPrintBlock(block = block, blocksList = blocksList, false)
+            is IfBlock -> drawIfBlock(block = block, blocksList = blocksList, false)
+            is ElseBlock -> drawElseBlock(block = block, blocksList = blocksList, false)
+            is ElseIfBlock -> drawElseIfBlock(block = block, blocksList = blocksList, false)
+            is WhileBlock -> drawWhileBlock(block = block, blocksList = blocksList, false)
+            is ForBlock -> drawForBlock(block = block, blocksList = blocksList, false)
+            is InputBlock -> drawInputBlock(block = block, blocksList = blocksList, false)
+            is DoWhileBlock -> drawDoWhileBlock(block = block, blocksList = blocksList, false)
         }
     }
 }
 
+//@OptIn(ExperimentalAnimationApi::class)
+//@Composable
+//fun drawShiftBlocks(block: Block) {
+//    val blockType = block.blockType as IfBlock
+//    if (blockType.blocks.isNotEmpty()) {
+//        blockType.blocks.forEach { shiftBlock ->
+//            when (shiftBlock.blockType) {
+//                is VarBlock -> drawVariableBlock(block = shiftBlock, blocksList = blockType.blocks)
+//                is PrintBlock -> drawPrintBlock(block = shiftBlock, blocksList = blockType.blocks)
+//                is IfBlock -> drawIfBlock(block = shiftBlock, blocksList = blockType.blocks)
+//                is ElseBlock -> drawElseBlock(block = shiftBlock, blocksList = blockType.blocks)
+//                is ElseIfBlock -> drawElseIfBlock(block = shiftBlock, blocksList = blockType.blocks)
+//                is WhileBlock -> drawWhileBlock(block = shiftBlock, blocksList = blockType.blocks)
+//                is ForBlock -> drawForBlock(block = shiftBlock, blocksList = blockType.blocks)
+//                is InputBlock -> drawInputBlock(block = shiftBlock, blocksList = blockType.blocks)
+//                is DoWhileBlock -> drawDoWhileBlock(
+//                    block = shiftBlock,
+//                    blocksList = blockType.blocks
+//                )
+//            }
+//        }
+//    }
+//}
+
+// todo return vibrate to dragToReorder
+@OptIn(ExperimentalAnimationApi::class)
+@Preview
+@Composable
+fun viewPreview() {
+    BlockView(
+        block = Block(0, VarBlock("", "")),
+        slideState = SlideState.NONE,
+        blocksList = mutableListOf(),
+        updateSlideState = { _, _ -> },
+        updateItemPosition = { _, _ -> }
+    )
+}

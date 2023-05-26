@@ -33,7 +33,7 @@ fun Modifier.dragToReorder(
     onStartDrag: () -> Unit,
     onStopDrag: (currentIndex: Int, destinationIndex: Int) -> Unit,
 ): Modifier = composed {
-    val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
+//    val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
     val offsetX = remember { Animatable(0f) }
     val offsetY = remember { Animatable(0f) }
     pointerInput(Unit) {
@@ -46,7 +46,7 @@ fun Modifier.dragToReorder(
             var listOffset = 0
 
             val onDragStart = {
-                vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
+//                vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
                 // Interrupt any ongoing animation of other items.
                 launch {
                     offsetX.stop()
@@ -114,7 +114,7 @@ fun Modifier.dragToReorder(
                 }
                 launch {
                     Log.i("LOG", "DragEnd")
-                    vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
+//                    vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
                     offsetY.animateTo(itemHeight * numberOfItems * offsetY.value.sign)
                     onStopDrag(blockIndex, blockIndex + listOffset)
                     Log.i("LOG", "DragEnd end")
