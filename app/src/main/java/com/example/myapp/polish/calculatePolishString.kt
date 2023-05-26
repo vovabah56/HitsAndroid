@@ -4,7 +4,7 @@ package com.example.myapplication.polish
 import java.lang.Exception
 
 
-fun calculatePolishString(polishString: String, variables: MutableMap<String, Int>): Int {
+fun calculatePolishString(polishString: String, variables: MutableMap<String, Int>, arrays: MutableMap<String, MutableList<Int>>): Int {
     val stack = Stack()
     var localPolishString = polishString
 

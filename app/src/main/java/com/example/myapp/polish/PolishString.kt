@@ -1,63 +1,72 @@
 package com.example.myapplication.polish
 
-import android.util.Log
-
-class PolishString constructor(expression: String, variables: MutableMap<String, Int>) {
+class PolishString constructor(expression: String, variables: MutableMap<String, Int>, arrays: MutableMap<String, MutableList<Int>>) {
     var expression: String
-    var isExprCorrect: Boolean = true
+    var isExpressionCorrect: Boolean = true
 
     init {
         this.expression = expression.filter { !it.isWhitespace() }
 
-        this.expression = CreateReversePolish(this.expression)
+        this.expression = turnToReversePolish(this.expression, variables, arrays)
     }
 
-
-
-    private fun CreateReversePolish(str: String): String {
+    private fun turnToReversePolish(str: String, variables: MutableMap<String, Int>, arrays: MutableMap<String, MutableList<Int>>): String {
         var reversePolish = ""
         val stack = Stack()
 
-        val letterArr = arrayListOf<Char>()
+        val letterArray = arrayListOf<Char>()
         for (i in 48..57)
-            letterArr.add(Char(i))
+            letterArray.add(Char(i))
         for (i in 65..90)
-            letterArr.add(Char(i))
+            letterArray.add(Char(i))
         for (i in 97..122)
-            letterArr.add(Char(i))
-        letterArr.add(Char(95))
+            letterArray.add(Char(i))
+        letterArray.add(Char(95))
 
-        for (char in str) {
-            if (char in letterArr) {
-                reversePolish += char
-            } else if(reversePolish.isNotEmpty()){
-                when (char) {
-                    '+', '-', '*', '/', '%', '(' -> {
-                        if (reversePolish.last() in letterArr && reversePolish.last() != ',') {
-                            reversePolish += ','
-                            Log.d("rePolish", "$reversePolish")
-                        }
-                        reversePolish += stack.push(char)
-                    }
-                    ')' -> {
-                        if (reversePolish.last() in letterArr && reversePolish.last() != ',')
-                            reversePolish += ','
-                        reversePolish += stack.closeBracket()
-                    }
+        var strWhithArr = str
+        val regex = Regex("[a-zA-Z_][a-zA-Z_0-9]*")
+        val matches = regex.findAll(str)
+        for (key in matches){
+            if (arrays.containsKey(key.value)) {
+                var sizeArr = arrays[key.value]!!.size
+                for (i in variables.keys){
+                    if(variables[i]!! < sizeArr)
+                        strWhithArr = "${key.value}\\[$i\\]".toRegex().replace(strWhithArr, arrays[key.value]!![variables[i]!!].toString())
+                }
+                for (i in 0..(sizeArr-1)){
+                    var ind = i.toString()
 
-                    else -> this.isExprCorrect = false
+
+                    strWhithArr = "${key.value}\\[$ind\\]".toRegex().replace(strWhithArr, arrays[key.value]!![i].toString())
                 }
             }
         }
 
-        while (!stack.isEmpty()) {
-            if(reversePolish.last() != ','){
-                reversePolish += ','
-            }
+        for (char in strWhithArr) {
+            if (char in letterArray) {
+                reversePolish += char
+            } else if(reversePolish.isNotEmpty()){
+                when (char) {
+                    '+', '-', '*', '/', '%', '(' -> {
+                        if (reversePolish.last() in letterArray)
+                            reversePolish += ','
+                        reversePolish += stack.push(char)
+                    }
+                    ')' -> {
+                        if (reversePolish.last() in letterArray)
+                            reversePolish += ','
+                        reversePolish += stack.closeBracket()
+                    }
 
+                    else -> this.isExpressionCorrect = false
+                }
+            }
+        }
+        while (!stack.isEmpty()) {
+            reversePolish += ','
             reversePolish += stack.arrayOfChars.removeAt(stack.arrayOfChars.size - 1)
         }
-        Log.d("polish", "$reversePolish")
-        return "$reversePolish"
+
+        return "$reversePolish,"
     }
 }
