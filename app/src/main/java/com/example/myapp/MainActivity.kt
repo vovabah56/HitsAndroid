@@ -291,7 +291,8 @@ fun CodeScreenButtons(
             }
             var variables = mutableMapOf<String, Int>()
             var arrays = mutableMapOf<String, MutableList<Int>>()
-            interpretator(blocksList, variables, arrays, logList, errorList)
+            // errorList
+            interpretator(blocksList, variables, arrays, logList)
 //                             Log.d("BLOCKS PRINT", "${blocksList.forEach()}")
         }, Modifier.padding(8.dp)) {
             Icon(Icons.Default.PlayArrow, contentDescription = "Запустить")
