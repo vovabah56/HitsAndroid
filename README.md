@@ -24,7 +24,7 @@ Mobile interpreter
 <p>🗸 Всплывающее окно ошибки.</p>
 </div> 
 
-<h1> Примеры работы: <h1>
+<h1> Примеры работы: </h1>
  <div>
  <span><img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/ac770ed9-9c59-41da-b45e-a45aafe875a9" width="230" height="500" style="float: left"> <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/2943b6b5-03db-403e-af36-41f8913c9c39" width="230" height="500" style="float: left"> <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/007dd9c0-4e21-44c4-beb9-900bbc11d985" width="230" height="500" style="float: left"> <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/67d20056-3322-417d-be46-688257ad5c6f" width="230" height="500" style="float: left"></span>
  </div>
