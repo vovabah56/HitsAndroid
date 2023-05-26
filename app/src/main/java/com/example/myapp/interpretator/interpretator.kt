@@ -268,7 +268,7 @@ fun varBlock(
     console: MutableList<String>,
     errorConsole: MutableList<String>
 ) {
-    if ("," in block.value && "[" in block.value && "]" in block.value) {
+    if ("," in block.value &&  "[" in block.value && "]" in block.value) {
         var str = block.value.replace("[", "").replace("]", "")
 
 
