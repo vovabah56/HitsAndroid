@@ -66,7 +66,7 @@ fun drawElseIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Bo
         )
         Box(
             modifier = Modifier
-                .padding(start = 50.dp, bottom = 90.dp),
+                .padding(start = 46.dp, bottom = 90.dp),
             contentAlignment = Alignment.TopCenter
         ) { Text("elif block", color = Color.White, textAlign = TextAlign.Center) }
 
