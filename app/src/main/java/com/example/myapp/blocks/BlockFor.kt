@@ -4,6 +4,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -137,10 +138,10 @@ fun drawForBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boole
                 )
             }
             // todo подсказка при вводе
-            Divider(thickness = 25.dp)
+            Box(modifier = Modifier.size(10.dp, 52.dp))
             Box(modifier = Modifier.size(100.dp, 52.dp)) {
                 TextField(
-                    value = variable.value,
+                    value = range.value,
                     onValueChange = {
                         range.value = it
                         blockType.range = it
@@ -166,7 +167,7 @@ fun drawForBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boole
             }
             Box(
                 modifier = Modifier
-                    .padding(start = 42.dp)
+                    .padding(start = 31.dp)
 
             ) {
                 TextButton(

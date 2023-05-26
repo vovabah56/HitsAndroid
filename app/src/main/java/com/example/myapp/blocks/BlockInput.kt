@@ -17,7 +17,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,8 +29,6 @@ import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import com.example.myapp.model.Block
 import com.example.myapp.model.InputBlock
-import com.example.myapp.model.PrintBlock
-import com.example.myapp.model.VarBlock
 
 @ExperimentalAnimationApi
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,15 +59,15 @@ fun drawInputBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boo
             var outputValue = remember {
                 mutableStateOf("")
             }
-            if (blockType.value != "") {
-                outputValue.value = blockType.value
+            if (blockType.name != "") {
+                outputValue.value = blockType.name
             }
             Box(modifier = Modifier.size(231.dp, 52.dp)) {
                 TextField(
                     value = outputValue.value,
                     onValueChange = {
                         outputValue.value = it
-                        blockType.value = it
+                        blockType.name = it
                     },
                     shape = RoundedCornerShape(20.dp),
                     colors = TextFieldDefaults.textFieldColors(

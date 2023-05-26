@@ -5,11 +5,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -28,64 +34,115 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import com.example.myapp.model.Block
+import com.example.myapp.model.ElseIfBlock
+import com.example.myapp.model.IfBlock
 import com.example.myapp.model.PrintBlock
+import com.example.myapp.model.VarBlock
 
 @ExperimentalAnimationApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun drawElseIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
-    Image(
-        painter = painterResource(id = R.drawable.print),
-        contentDescription = null,
-    )
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .padding(start = 16.dp, bottom = 10.dp)
-    ) {
-        var outputValue = remember {
-            mutableStateOf("")
-        }
-        if ((block.blockType as PrintBlock).value != "") {
-            outputValue.value = (block.blockType as PrintBlock).value
-        }
-        Box(modifier = Modifier.size(231.dp, 52.dp)) {
-            TextField(
-                value = outputValue.value,
-                onValueChange = {
-                    outputValue.value = it
-                    (block.blockType as PrintBlock).value = it
-                },
-                shape = RoundedCornerShape(20.dp),
-                colors = TextFieldDefaults.textFieldColors(
-                    textColor = Color.Black,
-                    disabledTextColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent
-                ),
-                placeholder = {
-                    Text(
-                        text = "output in console",
-                        modifier = Modifier.fillMaxSize(),
-                        textAlign = TextAlign.Center,
-                    )
-                },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                textStyle = TextStyle(textAlign = TextAlign.Center)
-            )
-        }
+    val blockId = if (!shiftBlock) {
+        R.drawable.block
+    } else {
+        R.drawable.under_block
+    }
+    var lastId = 0
+    val blockType = block.blockType as ElseIfBlock
+    val newBlocksList: MutableList<Block> = blockType.blocks
+    Box(
+        Modifier
+            .offset(y = 110.dp)
+            .height(105.dp + 110.dp * newBlocksList.size)
+            .padding(start = 26.dp)
+    ) { OnShiftBlockCreate(newBlocksList) }
+
+    Box(contentAlignment = Alignment.CenterStart) {
+
+        Image(
+            painter = painterResource(id = blockId),
+            contentDescription = null,
+        )
         Box(
             modifier = Modifier
-                .padding(start = 42.dp)
+                .padding(start = 50.dp, bottom = 90.dp),
+            contentAlignment = Alignment.TopCenter
+        ) { Text("elif block", color = Color.White, textAlign = TextAlign.Center) }
 
+        Row(
+            modifier = Modifier
+                .padding(start = 0.dp, bottom = 10.dp)
         ) {
-            TextButton(
-                onClick = {
-                    blocksList.remove(block)
-                },
+            var condition = remember {
+                mutableStateOf("")
+            }
+            if (blockType.condition != "") {
+                condition.value = blockType.condition
+            }
+            // todo Arrow drop down??
+            Box(contentAlignment = Alignment.CenterEnd) {
+                IconButton(
+                    onClick = {
+                        if (newBlocksList.size > 0) {
+                            lastId = newBlocksList.last().id + 1
+                        }
+                        // костыль (
+                        blocksList.add(Block(10000, VarBlock("", "")))
+                        blocksList.remove(Block(10000, VarBlock("", "")))
+                        // конец костыля )
+                        blockType.blocks.add(Block(lastId, VarBlock("", "")))
+//                        newBlocksList.add(Block(lastId, VarBlock("", "")))
+
+
+                    }
+                ) {
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = "Добавить блок",
+                        tint = Color.White,
+                        modifier = Modifier.padding(start = 5.dp)
+                    )
+                }
+            }
+            Box(modifier = Modifier.size(200.dp, 52.dp)) {
+                TextField(
+                    value = condition.value,
+                    onValueChange = {
+                        condition.value = it
+                        blockType.condition = it
+                    },
+                    shape = RoundedCornerShape(20.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        textColor = Color.Black,
+                        disabledTextColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent
+                    ),
+                    placeholder = {
+                        Text(
+                            text = "condition",
+                            modifier = Modifier.fillMaxSize(),
+                            textAlign = TextAlign.Center,
+                        )
+                    },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    textStyle = TextStyle(textAlign = TextAlign.Center)
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .padding(start = 42.dp)
+
             ) {
-                Text("×", fontSize = 20.sp, color = Color.White)
+                TextButton(
+                    onClick = {
+                        blocksList.remove(block)
+                    },
+                ) {
+                    Text("×", fontSize = 20.sp, color = Color.White)
+                }
             }
         }
     }
