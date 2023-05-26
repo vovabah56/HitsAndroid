@@ -3,25 +3,32 @@ package com.example.myapp.interpretator
 
 import com.example.myapplication.polish.PolishString
 
-fun expressionBlock(tree: MutableList<String>, text: String, variables: MutableMap<String, Int>, arrays: MutableMap<String, MutableList<Int>>) {
+fun expressionBlock(
+    tree: MutableList<String>,
+    text: String,
+    variables: MutableMap<String, Int>,
+    arrays: MutableMap<String, MutableList<Int>>
+) {
 
     var textExpression = text
 
     var strWhithArr = text
     val regex = Regex("[a-zA-Z_][a-zA-Z_0-9]*")
     val matches = regex.findAll(text)
-    for (key in matches){
+    for (key in matches) {
         if (arrays.containsKey(key.value)) {
             var sizeArr = arrays[key.value]!!.size
-            for (i in variables.keys){
-                if(variables[i]!! < sizeArr)
-                    strWhithArr = "${key.value}\\[$i\\]".toRegex().replace(strWhithArr, arrays[key.value]!![variables[i]!!].toString())
+            for (i in variables.keys) {
+                if (variables[i]!! < sizeArr)
+                    strWhithArr = "${key.value}\\[$i\\]".toRegex()
+                        .replace(strWhithArr, arrays[key.value]!![variables[i]!!].toString())
             }
-            for (i in 0..(sizeArr-1)){
+            for (i in 0..(sizeArr - 1)) {
                 var ind = i.toString()
 
 
-                strWhithArr = "${key.value}\\[$ind\\]".toRegex().replace(strWhithArr, arrays[key.value]!![i].toString())
+                strWhithArr = "${key.value}\\[$ind\\]".toRegex()
+                    .replace(strWhithArr, arrays[key.value]!![i].toString())
             }
         }
     }
