@@ -18,14 +18,14 @@ fun expressionBlock(
     val matches = regex.findAll(text)
     for (key in matches) {
         if (arrays.containsKey(key.value)) {
-            var sizeArr = arrays[key.value]!!.size
+            val sizeArr = arrays[key.value]!!.size
             for (i in variables.keys) {
                 if (variables[i]!! < sizeArr)
                     strWhithArr = "${key.value}\\[$i\\]".toRegex()
                         .replace(strWhithArr, arrays[key.value]!![variables[i]!!].toString())
             }
             for (i in 0..(sizeArr - 1)) {
-                var ind = i.toString()
+                val ind = i.toString()
 
 
                 strWhithArr = "${key.value}\\[$ind\\]".toRegex()
@@ -33,9 +33,12 @@ fun expressionBlock(
             }
         }
     }
-    if(textExpression.contains("\\[.*\\]".toRegex())){
+    if (textExpression.contains("\\[.*\\]".toRegex())) {
         errorConsole.add("Error in the index array")
+        errorConsole.add("Error in the index array")
+
     }
+
     textExpression = strWhithArr
 
 
@@ -79,7 +82,7 @@ fun expressionBlock(
         textExpression = "\\)(?<=[0-9a-zA-Z_])".toRegex().replace(textExpression, ")*")
 
         //прогон по польской строке
-        val polString = PolishString(textExpression, variables, arrays,errorConsole)
+        val polString = PolishString(textExpression, variables, arrays, errorConsole)
 
         if (polString.isExpressionCorrect) {
             tree.add(",+".toRegex().replace(polString.expression, ","))
