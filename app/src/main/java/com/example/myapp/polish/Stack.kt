@@ -9,19 +9,7 @@ class Stack {
     fun isEmpty(): Boolean {
         return arrayOfChars.isEmpty()
     }
-    fun isEmpty2(): Boolean {
-        return arrayOfInts.isEmpty()
-    }
 
-    fun ordinaryPush(element: Int?) {
-        if (element != null) {
-            arrayOfInts.add(element)
-        }
-    }
-
-    fun ordinaryPop(): Int {
-        return arrayOfInts.removeAt(arrayOfInts.size - 1)
-    }
 
     fun push(element: Char): String {
         var output = ""
