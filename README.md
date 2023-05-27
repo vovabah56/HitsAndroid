@@ -28,6 +28,10 @@ Mobile interpreter
  <div>
  <span><img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/ac770ed9-9c59-41da-b45e-a45aafe875a9" width="220" height="500" style="float: left"> <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/2943b6b5-03db-403e-af36-41f8913c9c39" width="220" height="500" style="float: left"> <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/007dd9c0-4e21-44c4-beb9-900bbc11d985" width="220" height="500" style="float: left"> <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/67d20056-3322-417d-be46-688257ad5c6f" width="220" height="500" style="float: left"></span>
  </div>
+ 
+ <span> Правильное заполнение блоков:</span>
+ <span> <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/76114338-886b-4e99-9d9e-a2380866fa5f" width="220" height="500" style="float: left">  <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/89a17010-3ef6-4f01-9c9e-a4373fc770c6
+" width="220" height="500" style="float: left">  </span>
  <div>
 <p><a href="https://vk.com/vovabah56">Владимир Бахман</a> Разрабатывал основную логику программы(Большую часть)</p>
 <p><a href="https://vk.com/cah9d">Александр Дядяшкин</a>  Разрабатывал Ui, а так же логику программы</p>
