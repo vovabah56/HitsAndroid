@@ -1,6 +1,7 @@
 package com.example.myapp.interpretator
 
 import android.util.Log
+
 import com.example.myapp.model.*
 import com.example.myapplication.polish.PolishString
 import com.example.myapplication.polish.calculatePolishString
@@ -98,6 +99,9 @@ fun forBlock(
     errorConsole: MutableList<String>
 ) {
     val range = block.range.split(",")
+    if (range.size != 2) {
+        console.add("#Invalid array")
+    }
     val first = calculatePolishString(
         PolishString(range[0], variables, arrays, errorConsole).expression,
         variables,
@@ -248,6 +252,7 @@ fun varBlock(
     } else if ("[" in block.name && "]" in block.name) {
 
         val str = block.name.split("[")
+
         val name = str[0]
         val index = str[1].replace("]", "")
         val ind = calculatePolishString(

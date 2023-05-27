@@ -27,17 +27,18 @@ fun conditionBlock(
     //лишние символы
     var strWhithArr = text
     val regex = Regex("[a-zA-Z_][a-zA-Z_0-9]*")
+
     val matches = regex.findAll(text)
     for (key in matches) {
         if (arrays.containsKey(key.value)) {
-            var sizeArr = arrays[key.value]!!.size
+            val sizeArr = arrays[key.value]!!.size
             for (i in variables.keys) {
                 if (variables[i]!! < sizeArr)
                     strWhithArr = "${key.value}\\[$i\\]".toRegex()
                         .replace(strWhithArr, arrays[key.value]!![variables[i]!!].toString())
             }
-            for (i in 0 until (sizeArr-1)) {
-                var ind = i.toString()
+            for (i in 0 until (sizeArr - 1)) {
+                val ind = i.toString()
 
 
                 strWhithArr = "${key.value}\\[$ind\\]".toRegex()
