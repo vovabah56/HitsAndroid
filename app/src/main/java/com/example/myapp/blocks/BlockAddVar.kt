@@ -1,6 +1,5 @@
 package com.example.myapp.blocks
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -21,11 +20,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.myapp.R
@@ -34,7 +33,7 @@ import com.example.myapp.model.VarBlock
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun drawVariableBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
+fun DrawVariableBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
     val blockType = block.blockType as VarBlock
     val blockId = if (!shiftBlock) {
         R.drawable.block
@@ -57,7 +56,7 @@ fun drawVariableBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: 
             modifier = Modifier
                 .padding(start = 16.dp, bottom = 10.dp)
         ) {
-            var variable = rememberSaveable {
+            val variable = rememberSaveable {
                 mutableStateOf("")
             }
             if (blockType.name != "") {
@@ -96,7 +95,7 @@ fun drawVariableBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: 
                 textAlign = TextAlign.Center,
                 color = Color.White,
             )
-            var varValue = remember {
+            val varValue = remember {
                 mutableStateOf("")
             }
             if (blockType.value != "") {
@@ -126,6 +125,7 @@ fun drawVariableBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: 
                             text = "value",
                             modifier = Modifier.fillMaxSize(),
                             textAlign = TextAlign.Center,
+                            color = colorResource(id = R.color.gray_200)
                         )
                     },
                     textStyle = TextStyle(textAlign = TextAlign.Center)

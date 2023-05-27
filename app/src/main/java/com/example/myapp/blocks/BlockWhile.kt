@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,9 +46,6 @@ import com.example.myapp.ButtonSelectionScreen
 import com.example.myapp.R
 import com.example.myapp.clickHandler
 import com.example.myapp.model.Block
-import com.example.myapp.model.IfBlock
-import com.example.myapp.model.PrintBlock
-import com.example.myapp.model.VarBlock
 import com.example.myapp.model.WhileBlock
 
 @ExperimentalAnimationApi
@@ -59,7 +57,6 @@ fun drawWhileBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boo
     } else {
         R.drawable.under_block
     }
-    var lastId = 0
     val blockType = block.blockType as WhileBlock
     val newBlocksList: MutableList<Block> = blockType.blocks
     Box(
@@ -85,13 +82,12 @@ fun drawWhileBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boo
             modifier = Modifier
                 .padding(start = 0.dp, bottom = 10.dp)
         ) {
-            var condition = remember {
+            val condition = remember {
                 mutableStateOf("")
             }
             if (blockType.condition != "") {
                 condition.value = blockType.condition
             }
-            // todo Arrow drop down??
             var expanded by remember { mutableStateOf(false) }
             Box(contentAlignment = Alignment.CenterEnd) {
                 IconButton(
@@ -127,6 +123,7 @@ fun drawWhileBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boo
                             text = "condition",
                             modifier = Modifier.fillMaxSize(),
                             textAlign = TextAlign.Center,
+                            color = colorResource(id = R.color.gray_200)
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -153,7 +150,7 @@ fun drawWhileBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boo
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Dialog(onDismissRequest = { expanded = !expanded }) {
-                    (LocalView.current.parent as DialogWindowProvider)?.window?.setDimAmount(0.8f)
+                    (LocalView.current.parent as DialogWindowProvider).window.setDimAmount(0.8f)
                     ButtonSelectionScreen(onButtonClick = { buttonType ->
                         expanded = !expanded
                         clickHandler(

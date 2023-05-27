@@ -35,8 +35,6 @@ import androidx.compose.ui.unit.sp
 import com.example.myapp.R
 import com.example.myapp.model.Block
 import com.example.myapp.model.ElseIfBlock
-import com.example.myapp.model.IfBlock
-import com.example.myapp.model.PrintBlock
 import com.example.myapp.model.VarBlock
 
 @ExperimentalAnimationApi
@@ -74,13 +72,12 @@ fun drawElseIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Bo
             modifier = Modifier
                 .padding(start = 0.dp, bottom = 10.dp)
         ) {
-            var condition = remember {
+            val condition = remember {
                 mutableStateOf("")
             }
             if (blockType.condition != "") {
                 condition.value = blockType.condition
             }
-            // todo Arrow drop down??
             Box(contentAlignment = Alignment.CenterEnd) {
                 IconButton(
                     onClick = {

@@ -7,23 +7,17 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,8 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,20 +38,15 @@ import com.example.myapp.R
 import com.example.myapp.clickHandler
 import com.example.myapp.model.Block
 import com.example.myapp.model.ElseBlock
-import com.example.myapp.model.IfBlock
-import com.example.myapp.model.PrintBlock
-import com.example.myapp.model.VarBlock
 
 @ExperimentalAnimationApi
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun drawElseBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
+fun DrawElseBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
     val blockId = if (!shiftBlock) {
         R.drawable.block
     } else {
         R.drawable.under_block
     }
-    var lastId = 0
     val blockType = block.blockType as ElseBlock
     val newBlocksList: MutableList<Block> = blockType.blocks
     Box(
@@ -85,13 +72,6 @@ fun drawElseBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Bool
             modifier = Modifier
                 .padding(start = 0.dp, bottom = 10.dp)
         ) {
-//            var condition = remember {
-//                mutableStateOf("")
-//            }
-//            if (blockType.condition != "") {
-//                condition.value = blockType.condition
-//            }
-            // todo Arrow drop down??
             // todo update on delete...
             var expanded by remember { mutableStateOf(false) }
             Box(contentAlignment = Alignment.CenterEnd) {
@@ -130,7 +110,7 @@ fun drawElseBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Bool
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Dialog(onDismissRequest = { expanded = !expanded }) {
-                    (LocalView.current.parent as DialogWindowProvider)?.window?.setDimAmount(0.8f)
+                    (LocalView.current.parent as DialogWindowProvider).window.setDimAmount(0.8f)
                     ButtonSelectionScreen(onButtonClick = { buttonType ->
                         expanded = !expanded
                         clickHandler(

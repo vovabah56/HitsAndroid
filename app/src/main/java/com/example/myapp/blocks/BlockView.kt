@@ -10,7 +10,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
@@ -99,15 +98,15 @@ fun BlockView(
         ) {
         // todo write all draw blocks
         when (block.blockType) {
-            is VarBlock -> drawVariableBlock(block = block, blocksList = blocksList, false)
+            is VarBlock -> DrawVariableBlock(block = block, blocksList = blocksList, false)
             is PrintBlock -> drawPrintBlock(block = block, blocksList = blocksList, false)
             is IfBlock -> drawIfBlock(block = block, blocksList = blocksList, false)
-            is ElseBlock -> drawElseBlock(block = block, blocksList = blocksList, false)
+            is ElseBlock -> DrawElseBlock(block = block, blocksList = blocksList, false)
             is ElseIfBlock -> drawElseIfBlock(block = block, blocksList = blocksList, false)
             is WhileBlock -> drawWhileBlock(block = block, blocksList = blocksList, false)
             is ForBlock -> drawForBlock(block = block, blocksList = blocksList, false)
             is InputBlock -> drawInputBlock(block = block, blocksList = blocksList, false)
-            is DoWhileBlock -> drawDoWhileBlock(block = block, blocksList = blocksList, false)
+            is DoWhileBlock -> DrawDoWhileBlock(block = block, blocksList = blocksList, false)
         }
     }
 }

@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -56,7 +57,7 @@ fun drawInputBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boo
             modifier = Modifier
                 .padding(start = 16.dp, bottom = 10.dp)
         ) {
-            var outputValue = remember {
+            val outputValue = remember {
                 mutableStateOf("")
             }
             if (blockType.name != "") {
@@ -82,6 +83,7 @@ fun drawInputBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boo
                             text = "input text",
                             modifier = Modifier.fillMaxSize(),
                             textAlign = TextAlign.Center,
+                            color = colorResource(id = R.color.gray_200)
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),

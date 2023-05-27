@@ -17,13 +17,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.myapp.model.Block
@@ -41,56 +40,56 @@ fun MainScreen() {
     val blocksList: MutableList<Block> = remember { mutableStateListOf() }
     val logList: MutableList<String> = remember { mutableStateListOf("") }
     val errorList: MutableList<String> = remember { mutableStateListOf("") }
-    var selectedIndex by remember { mutableStateOf(0) }
+    val selectedIndex = remember { mutableStateOf(0) }
 
 
     Scaffold(
         bottomBar = {
             AnimatedNavigationBar(
-                selectedIndex = selectedIndex,
+                selectedIndex = selectedIndex.value,
                 modifier = Modifier
                     .padding(16.dp)
                     .height(64.dp),
                 cornerRadius = shapeCornerRadius(34.dp),
                 ballAnimation = Parabolic(tween(300)),
                 indentAnimation = Height(tween(300)),
-                barColor = MaterialTheme.colorScheme.primary,
-                ballColor = MaterialTheme.colorScheme.primary
+                barColor = colorResource(id = R.color.gray_200),
+                ballColor = colorResource(id = R.color.gray_200),
             ) {
                 navigationBarItems.forEach { item ->
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .noRippleClickable { selectedIndex = item.ordinal },
+                            .noRippleClickable { selectedIndex.value = item.ordinal },
                         contentAlignment = Alignment.Center,
                     ) {
                         Icon(
                             painter = painterResource(id = item.icon),
                             modifier = Modifier.size(26.dp),
                             contentDescription = "Botton Bar Icon",
-                            tint = if (selectedIndex == item.ordinal) MaterialTheme.colorScheme.onPrimary
-                            else MaterialTheme.colorScheme.inversePrimary
+                            tint = if (selectedIndex.value == item.ordinal) colorResource(id = R.color.white)
+                            else colorResource(id = R.color.gray_400)
                         )
                     }
                 }
             }
         }) {
         AnimatedVisibility(
-            visible = selectedIndex == 0,
+            visible = selectedIndex.value == 0,
             enter = fadeIn(animationSpec = tween(300)),
             exit = fadeOut(animationSpec = tween(300)),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Home(blocksList, logList, errorList)
+            Home(blocksList, logList, errorList, selectedIndex)
         }
         AnimatedVisibility(
-            visible = selectedIndex == 1,
+            visible = selectedIndex.value == 1,
             enter = fadeIn(animationSpec = tween(300)),
             exit = fadeOut(animationSpec = tween(300)),
             modifier = Modifier.fillMaxWidth()
         ) {
             ConsoleScreen(logList)
-            BotSheet(logList)
+//            BotSheet(logList)
         }
     }
 }

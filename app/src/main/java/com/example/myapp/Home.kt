@@ -2,6 +2,7 @@ package com.example.myapp
 
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -32,6 +33,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateMapOf
@@ -58,7 +60,8 @@ import kotlinx.coroutines.launch
 fun Home(
     blocksList: MutableList<Block>,
     logList: MutableList<String>,
-    errorList: MutableList<String>
+    errorList: MutableList<String>,
+    selectedIndex: MutableState<Int>
 ) {
 
     val slideStates = remember {
@@ -70,7 +73,7 @@ fun Home(
             }
         }
     }
-    CodeScreenButtons(blocksList, logList, errorList)
+    CodeScreenButtons(blocksList, logList, errorList, selectedIndex)
     ListView(
         blocksList = blocksList,
         slideStates = slideStates,
@@ -80,7 +83,7 @@ fun Home(
             blocksList.removeAt(currentIndex)
             blocksList.add(destinationIndex, blockList)
             slideStates.apply {
-                blocksList.map { blockList -> blockList to SlideState.NONE }.toMap().also {
+                blocksList.associateWith { SlideState.NONE }.also {
                     putAll(it)
                 }
             }
@@ -131,11 +134,12 @@ fun CodeScreenButtons(
     blocksList: MutableList<Block>,
     logList: MutableList<String>,
     errorList: MutableList<String>,
+    selectedIndex: MutableState<Int>
 ) {
     val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
     var expanded by remember { mutableStateOf(false) }
     Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
-        Box() {
+        Box {
             IconButton(
                 onClick = {
                     expanded = !expanded
@@ -153,7 +157,7 @@ fun CodeScreenButtons(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Dialog(onDismissRequest = { expanded = !expanded }) {
-                    (LocalView.current.parent as DialogWindowProvider)?.window?.setDimAmount(0.8f)
+                    (LocalView.current.parent as DialogWindowProvider).window.setDimAmount(0.8f)
                     ButtonSelectionScreen(onButtonClick = { buttonType ->
                         expanded = !expanded
                         vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
@@ -168,12 +172,18 @@ fun CodeScreenButtons(
         }
 
         IconButton(onClick = {
-            if (logList.size > 0) {
-                logList.add("----------")
+            Log.i("Start CLicked", "${logList.size}")
+            if (logList.size > 1) {
+                logList.add("--------------------------------------------------")
             }
-            var variables = mutableMapOf<String, Int>()
-            var arrays = mutableMapOf<String, MutableList<Int>>()
-            interpreter(blocksList, variables, arrays, logList, errorList)
+            selectedIndex.value = 1
+            interpreter(
+                blocksList,
+                mutableMapOf(),
+                mutableMapOf(),
+                logList,
+                errorList
+            )
         }, Modifier.padding(8.dp)) {
             Icon(Icons.Default.PlayArrow, contentDescription = "Запустить")
         }

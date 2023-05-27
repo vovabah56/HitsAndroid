@@ -45,9 +45,9 @@ fun ShiftListView(
 fun OnShiftBlockCreate(blocksList: MutableList<Block>) {
     val slideStates = remember {
         mutableStateMapOf<Block, SlideState>().apply {
-            blocksList.map { blockList ->
-                blockList to SlideState.NONE
-            }.toMap().also {
+            blocksList.associateWith {
+                SlideState.NONE
+            }.also {
                 putAll(it)
             }
         }
@@ -61,7 +61,7 @@ fun OnShiftBlockCreate(blocksList: MutableList<Block>) {
             blocksList.removeAt(currentIndex)
             blocksList.add(destinationIndex, blockList)
             slideStates.apply {
-                blocksList.map { blockList -> blockList to SlideState.NONE }.toMap().also {
+                blocksList.associateWith { SlideState.NONE }.also {
                     putAll(it)
                 }
             }

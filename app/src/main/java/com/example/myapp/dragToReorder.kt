@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
@@ -33,7 +34,7 @@ fun Modifier.dragToReorder(
     onStartDrag: () -> Unit,
     onStopDrag: (currentIndex: Int, destinationIndex: Int) -> Unit,
 ): Modifier = composed {
-//    val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
+    val vibrator = LocalContext.current.getSystemService(Vibrator::class.java)
     val offsetX = remember { Animatable(0f) }
     val offsetY = remember { Animatable(0f) }
     pointerInput(Unit) {
@@ -46,7 +47,7 @@ fun Modifier.dragToReorder(
             var listOffset = 0
 
             val onDragStart = {
-//                vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
+                vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
                 // Interrupt any ongoing animation of other items.
                 launch {
                     offsetX.stop()
@@ -106,18 +107,16 @@ fun Modifier.dragToReorder(
                     listOffset = numberOfItems * offsetSign
                 }
                 // Consume the gesture event, not passed to external
-                change.consumePositionChange()
+                if (change.positionChange() != Offset.Zero) change.consume()
             }
             val onDragEnd = {
                 launch {
                     offsetX.animateTo(0f)
                 }
                 launch {
-                    Log.i("LOG", "DragEnd")
-//                    vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
+                    vibrator.vibrate(VibrationEffect.createOneShot(50, 10))
                     offsetY.animateTo(itemHeight * numberOfItems * offsetY.value.sign)
                     onStopDrag(blockIndex, blockIndex + listOffset)
-                    Log.i("LOG", "DragEnd end")
                 }
             }
             if (isDraggedAfterLongPress)

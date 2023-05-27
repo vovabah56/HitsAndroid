@@ -1,10 +1,6 @@
 package com.example.myapp.blocks
 
 
-import android.os.VibrationEffect
-import androidx.compose.animation.AnimatedVisibility
-import com.example.myapp.R
-
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -18,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -32,8 +27,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -41,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -51,11 +45,10 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
 import com.example.myapp.ButtonSelectionScreen
+import com.example.myapp.R
 import com.example.myapp.clickHandler
 import com.example.myapp.model.Block
 import com.example.myapp.model.IfBlock
-import com.example.myapp.model.SlideState
-import com.example.myapp.model.VarBlock
 
 
 @ExperimentalAnimationApi
@@ -67,7 +60,6 @@ fun drawIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolea
     } else {
         R.drawable.under_block
     }
-    var lastId = 0
     val blockType = block.blockType as IfBlock
     val newBlocksList: MutableList<Block> = blockType.blocks
     Box(
@@ -93,7 +85,7 @@ fun drawIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolea
             modifier = Modifier
                 .padding(start = 0.dp, bottom = 10.dp)
         ) {
-            var condition = remember {
+            val condition = remember {
                 mutableStateOf("")
             }
             if (blockType.condition != "") {
@@ -135,6 +127,7 @@ fun drawIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolea
                             text = "condition",
                             modifier = Modifier.fillMaxSize(),
                             textAlign = TextAlign.Center,
+                            color = colorResource(id = R.color.gray_200)
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -161,7 +154,7 @@ fun drawIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolea
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Dialog(onDismissRequest = { expanded = !expanded }) {
-                    (LocalView.current.parent as DialogWindowProvider)?.window?.setDimAmount(0.8f)
+                    (LocalView.current.parent as DialogWindowProvider).window.setDimAmount(0.8f)
                     ButtonSelectionScreen(onButtonClick = { buttonType ->
                         expanded = !expanded
                         clickHandler(

@@ -98,15 +98,15 @@ fun ShiftBlockView(
     ) {
         // todo write all draw blocks
         when (block.blockType) {
-            is VarBlock -> drawVariableBlock(block = block, blocksList = blocksList, true)
+            is VarBlock -> DrawVariableBlock(block = block, blocksList = blocksList, true)
             is PrintBlock -> drawPrintBlock(block = block, blocksList = blocksList, true)
             is IfBlock -> drawIfBlock(block = block, blocksList = blocksList, true)
-            is ElseBlock -> drawElseBlock(block = block, blocksList = blocksList, true)
+            is ElseBlock -> DrawElseBlock(block = block, blocksList = blocksList, true)
             is ElseIfBlock -> drawElseIfBlock(block = block, blocksList = blocksList, true)
             is WhileBlock -> drawWhileBlock(block = block, blocksList = blocksList, true)
             is ForBlock -> drawForBlock(block = block, blocksList = blocksList, true)
             is InputBlock -> drawInputBlock(block = block, blocksList = blocksList, true)
-            is DoWhileBlock -> drawDoWhileBlock(block = block, blocksList = blocksList, true)
+            is DoWhileBlock -> DrawDoWhileBlock(block = block, blocksList = blocksList, true)
         }
     }
 }

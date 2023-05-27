@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -48,7 +47,6 @@ import com.example.myapp.R
 import com.example.myapp.clickHandler
 import com.example.myapp.model.Block
 import com.example.myapp.model.ForBlock
-import com.example.myapp.model.VarBlock
 
 @ExperimentalAnimationApi
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,7 +95,6 @@ fun drawForBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boole
             if (blockType.range != "") {
                 range.value = blockType.range
             }
-            // todo Arrow drop down??
             var expanded by remember { mutableStateOf(false) }
             Box(contentAlignment = Alignment.CenterEnd) {
                 IconButton(
@@ -133,6 +130,7 @@ fun drawForBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boole
                             text = "var",
                             modifier = Modifier.fillMaxSize(),
                             textAlign = TextAlign.Center,
+                            color = colorResource(id = R.color.gray_200)
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -162,6 +160,7 @@ fun drawForBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boole
                             text = "range",
                             modifier = Modifier.fillMaxSize(),
                             textAlign = TextAlign.Center,
+                            color = colorResource(id = R.color.gray_200)
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -188,7 +187,7 @@ fun drawForBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boole
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Dialog(onDismissRequest = { expanded = !expanded }) {
-                    (LocalView.current.parent as DialogWindowProvider)?.window?.setDimAmount(0.8f)
+                    (LocalView.current.parent as DialogWindowProvider).window.setDimAmount(0.8f)
                     ButtonSelectionScreen(onButtonClick = { buttonType ->
                         expanded = !expanded
                         clickHandler(
