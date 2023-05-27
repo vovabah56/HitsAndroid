@@ -30,8 +30,7 @@ Mobile interpreter
  </div>
  <div>
  <span> Правильное заполнение блоков:</span> </div>
- <span> <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/76114338-886b-4e99-9d9e-a2380866fa5f" width="220" height="500" style="float: left">  <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/89a17010-3ef6-4f01-9c9e-a4373fc770c6
-" width="220" height="500" style="float: left">  </span>
+ <span> <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/76114338-886b-4e99-9d9e-a2380866fa5f" width="220" height="500" style="float: left">  <img src="https://github.com/vovabah56/HitsAndroid/assets/128976851/57532cfb-7a3f-4a36-b2bd-430aa67c959d" width="220" height="500" style="float: left">  </span>
  <div>
 <p><a href="https://vk.com/vovabah56">Владимир Бахман</a> Разрабатывал основную логику программы(Большую часть)</p>
 <p><a href="https://vk.com/cah9d">Александр Дядяшкин</a>  Разрабатывал Ui, а так же логику программы</p>
