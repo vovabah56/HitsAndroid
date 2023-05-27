@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">myapp</string>
+    <string name="error_array">#Invalid array</string>
+
 </resources>
