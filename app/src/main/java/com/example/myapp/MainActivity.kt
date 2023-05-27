@@ -9,13 +9,18 @@ import android.os.VibratorManager
 import android.view.Menu
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.example.myapp.screens.MainScreen
+import com.example.myapp.ui.MyTheme
 
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainScreen()
+            MyTheme {
+                MainScreen()
+            }
+
         }
     }
 

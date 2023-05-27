@@ -1,4 +1,4 @@
-package com.example.myapp
+package com.example.myapp.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.myapp.R
 
 @Composable
 fun ConsoleScreen(consoleOutput: MutableList<String>) {

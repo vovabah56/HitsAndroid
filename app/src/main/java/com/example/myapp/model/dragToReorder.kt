@@ -1,5 +1,6 @@
-package com.example.myapp
+package com.example.myapp.model
 
+import android.annotation.SuppressLint
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.util.Log
@@ -15,8 +16,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.IntOffset
-import com.example.myapp.model.Block
-import com.example.myapp.model.SlideState
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.lang.IndexOutOfBoundsException
@@ -25,6 +24,7 @@ import kotlin.math.sign
 
 //https://developersbreach.com/drag-to-reorder-compose/
 
+@SuppressLint("ReturnFromAwaitPointerEventScope", "MultipleAwaitPointerEventScopes")
 fun Modifier.dragToReorder(
     block: Block,
     blocksList: MutableList<Block>,

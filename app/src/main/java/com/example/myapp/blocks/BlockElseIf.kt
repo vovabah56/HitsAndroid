@@ -40,7 +40,7 @@ import com.example.myapp.model.VarBlock
 @ExperimentalAnimationApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun drawElseIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
+fun DrawElseIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
     val blockId = if (!shiftBlock) {
         R.drawable.block
     } else {

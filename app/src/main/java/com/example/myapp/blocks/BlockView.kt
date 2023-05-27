@@ -13,12 +13,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.myapp.R
-import com.example.myapp.dragToReorder
+import com.example.myapp.model.dragToReorder
 import com.example.myapp.model.Block
 import com.example.myapp.model.DoWhileBlock
 import com.example.myapp.model.ElseBlock
@@ -99,52 +98,14 @@ fun BlockView(
         // todo write all draw blocks
         when (block.blockType) {
             is VarBlock -> DrawVariableBlock(block = block, blocksList = blocksList, false)
-            is PrintBlock -> drawPrintBlock(block = block, blocksList = blocksList, false)
-            is IfBlock -> drawIfBlock(block = block, blocksList = blocksList, false)
+            is PrintBlock -> DrawPrintBlock(block = block, blocksList = blocksList, false)
+            is IfBlock -> DrawIfBlock(block = block, blocksList = blocksList, false)
             is ElseBlock -> DrawElseBlock(block = block, blocksList = blocksList, false)
-            is ElseIfBlock -> drawElseIfBlock(block = block, blocksList = blocksList, false)
-            is WhileBlock -> drawWhileBlock(block = block, blocksList = blocksList, false)
-            is ForBlock -> drawForBlock(block = block, blocksList = blocksList, false)
-            is InputBlock -> drawInputBlock(block = block, blocksList = blocksList, false)
+            is ElseIfBlock -> DrawElseIfBlock(block = block, blocksList = blocksList, false)
+            is WhileBlock -> DrawWhileBlock(block = block, blocksList = blocksList, false)
+            is ForBlock -> DrawForBlock(block = block, blocksList = blocksList, false)
+            is InputBlock -> DrawInputBlock(block = block, blocksList = blocksList, false)
             is DoWhileBlock -> DrawDoWhileBlock(block = block, blocksList = blocksList, false)
         }
     }
-}
-
-//@OptIn(ExperimentalAnimationApi::class)
-//@Composable
-//fun drawShiftBlocks(block: Block) {
-//    val blockType = block.blockType as IfBlock
-//    if (blockType.blocks.isNotEmpty()) {
-//        blockType.blocks.forEach { shiftBlock ->
-//            when (shiftBlock.blockType) {
-//                is VarBlock -> drawVariableBlock(block = shiftBlock, blocksList = blockType.blocks)
-//                is PrintBlock -> drawPrintBlock(block = shiftBlock, blocksList = blockType.blocks)
-//                is IfBlock -> drawIfBlock(block = shiftBlock, blocksList = blockType.blocks)
-//                is ElseBlock -> drawElseBlock(block = shiftBlock, blocksList = blockType.blocks)
-//                is ElseIfBlock -> drawElseIfBlock(block = shiftBlock, blocksList = blockType.blocks)
-//                is WhileBlock -> drawWhileBlock(block = shiftBlock, blocksList = blockType.blocks)
-//                is ForBlock -> drawForBlock(block = shiftBlock, blocksList = blockType.blocks)
-//                is InputBlock -> drawInputBlock(block = shiftBlock, blocksList = blockType.blocks)
-//                is DoWhileBlock -> drawDoWhileBlock(
-//                    block = shiftBlock,
-//                    blocksList = blockType.blocks
-//                )
-//            }
-//        }
-//    }
-//}
-
-// todo return vibrate to dragToReorder
-@OptIn(ExperimentalAnimationApi::class)
-@Preview
-@Composable
-fun viewPreview() {
-    BlockView(
-        block = Block(0, VarBlock("", "")),
-        slideState = SlideState.NONE,
-        blocksList = mutableListOf(),
-        updateSlideState = { _, _ -> },
-        updateItemPosition = { _, _ -> }
-    )
 }

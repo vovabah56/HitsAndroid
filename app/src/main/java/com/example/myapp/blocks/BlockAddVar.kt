@@ -82,6 +82,7 @@ fun DrawVariableBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: 
                             text = "name",
                             modifier = Modifier.fillMaxSize(),
                             textAlign = TextAlign.Center,
+                            color = colorResource(id = R.color.gray_200)
                         )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),

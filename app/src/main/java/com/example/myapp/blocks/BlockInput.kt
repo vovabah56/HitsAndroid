@@ -34,7 +34,7 @@ import com.example.myapp.model.InputBlock
 @ExperimentalAnimationApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun drawInputBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
+fun DrawInputBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
     val blockType = block.blockType as InputBlock
     val blockId = if (!shiftBlock) {
         R.drawable.block

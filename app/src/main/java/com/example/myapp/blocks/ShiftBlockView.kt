@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.example.myapp.R
-import com.example.myapp.dragToReorder
+import com.example.myapp.model.dragToReorder
 import com.example.myapp.model.Block
 import com.example.myapp.model.DoWhileBlock
 import com.example.myapp.model.ElseBlock
@@ -99,13 +99,13 @@ fun ShiftBlockView(
         // todo write all draw blocks
         when (block.blockType) {
             is VarBlock -> DrawVariableBlock(block = block, blocksList = blocksList, true)
-            is PrintBlock -> drawPrintBlock(block = block, blocksList = blocksList, true)
-            is IfBlock -> drawIfBlock(block = block, blocksList = blocksList, true)
+            is PrintBlock -> DrawPrintBlock(block = block, blocksList = blocksList, true)
+            is IfBlock -> DrawIfBlock(block = block, blocksList = blocksList, true)
             is ElseBlock -> DrawElseBlock(block = block, blocksList = blocksList, true)
-            is ElseIfBlock -> drawElseIfBlock(block = block, blocksList = blocksList, true)
-            is WhileBlock -> drawWhileBlock(block = block, blocksList = blocksList, true)
-            is ForBlock -> drawForBlock(block = block, blocksList = blocksList, true)
-            is InputBlock -> drawInputBlock(block = block, blocksList = blocksList, true)
+            is ElseIfBlock -> DrawElseIfBlock(block = block, blocksList = blocksList, true)
+            is WhileBlock -> DrawWhileBlock(block = block, blocksList = blocksList, true)
+            is ForBlock -> DrawForBlock(block = block, blocksList = blocksList, true)
+            is InputBlock -> DrawInputBlock(block = block, blocksList = blocksList, true)
             is DoWhileBlock -> DrawDoWhileBlock(block = block, blocksList = blocksList, true)
         }
     }

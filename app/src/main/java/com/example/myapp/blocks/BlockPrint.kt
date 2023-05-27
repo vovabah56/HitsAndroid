@@ -36,7 +36,7 @@ import com.example.myapp.model.PrintBlock
 @ExperimentalAnimationApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun drawPrintBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
+fun DrawPrintBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
     val blockType = block.blockType as PrintBlock
     val blockId = if (!shiftBlock) {
         R.drawable.block

@@ -42,16 +42,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogWindowProvider
-import com.example.myapp.ButtonSelectionScreen
+import com.example.myapp.screens.ButtonSelectionScreen
 import com.example.myapp.R
-import com.example.myapp.clickHandler
+import com.example.myapp.screens.clickHandler
 import com.example.myapp.model.Block
 import com.example.myapp.model.WhileBlock
 
 @ExperimentalAnimationApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun drawWhileBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
+fun DrawWhileBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
     val blockId = if (!shiftBlock) {
         R.drawable.block
     } else {

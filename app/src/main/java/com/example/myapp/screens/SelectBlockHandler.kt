@@ -1,6 +1,5 @@
-package com.example.myapp
+package com.example.myapp.screens
 
-import android.os.VibrationEffect
 import com.example.myapp.model.Block
 import com.example.myapp.model.DoWhileBlock
 import com.example.myapp.model.ElseBlock
