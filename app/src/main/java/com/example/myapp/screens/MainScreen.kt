@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -26,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.myapp.R
 import com.example.myapp.model.Block
+import com.example.myapp.model.LogData
 import com.exyte.animatednavbar.AnimatedNavigationBar
 import com.exyte.animatednavbar.animation.balltrajectory.Parabolic
 import com.exyte.animatednavbar.animation.indendshape.Height
@@ -38,8 +40,7 @@ import com.exyte.animatednavbar.utils.noRippleClickable
 fun MainScreen() {
     val navigationBarItems = remember { NavigationBarItems.values() }
     val blocksList: MutableList<Block> = remember { mutableStateListOf() }
-    val logList: MutableList<String> = remember { mutableStateListOf("") }
-    val errorList: MutableList<String> = remember { mutableStateListOf("") }
+    val logList: MutableList<LogData> = remember { mutableStateListOf() }
     val selectedIndex = remember { mutableStateOf(0) }
 
 
@@ -53,8 +54,10 @@ fun MainScreen() {
                 cornerRadius = shapeCornerRadius(34.dp),
                 ballAnimation = Parabolic(tween(300)),
                 indentAnimation = Height(tween(300)),
-                barColor = colorResource(id = R.color.gray_200),
-                ballColor = colorResource(id = R.color.gray_200),
+                barColor = if (selectedIndex.value == 0) colorResource(id = R.color.gray_200)
+                else MaterialTheme.colorScheme.secondary,
+                ballColor = if (selectedIndex.value == 0) colorResource(id = R.color.gray_200)
+                else MaterialTheme.colorScheme.secondary,
             ) {
                 navigationBarItems.forEach { item ->
                     Box(
@@ -80,7 +83,7 @@ fun MainScreen() {
             exit = fadeOut(animationSpec = tween(300)),
             modifier = Modifier.fillMaxWidth()
         ) {
-            Home(blocksList, logList, errorList, selectedIndex)
+            Home(blocksList, logList, selectedIndex)
         }
         AnimatedVisibility(
             visible = selectedIndex.value == 1,
@@ -89,7 +92,9 @@ fun MainScreen() {
             modifier = Modifier.fillMaxWidth()
         ) {
             ConsoleScreen(logList)
-//            BotSheet(logList)
+            BotSheet(logList)
+
+
         }
     }
 }

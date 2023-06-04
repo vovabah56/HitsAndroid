@@ -1,8 +1,10 @@
 package com.example.myapp.blocks
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -39,6 +41,7 @@ private var slotItemDifference = 0f
 @ExperimentalAnimationApi
 @Composable
 fun ShiftBlockView(
+    mainBlocks: MutableList<Block>,
     block: Block,
     slideState: SlideState,
     blocksList: MutableList<Block>,
@@ -96,11 +99,10 @@ fun ShiftBlockView(
         contentAlignment = Alignment.CenterStart
 
     ) {
-        // todo write all draw blocks
         when (block.blockType) {
             is VarBlock -> DrawVariableBlock(block = block, blocksList = blocksList, true)
             is PrintBlock -> DrawPrintBlock(block = block, blocksList = blocksList, true)
-            is IfBlock -> DrawIfBlock(block = block, blocksList = blocksList, true)
+            is IfBlock -> DrawIfBlock(block = block, blocksList = blocksList, true, mainBlocks)
             is ElseBlock -> DrawElseBlock(block = block, blocksList = blocksList, true)
             is ElseIfBlock -> DrawElseIfBlock(block = block, blocksList = blocksList, true)
             is WhileBlock -> DrawWhileBlock(block = block, blocksList = blocksList, true)

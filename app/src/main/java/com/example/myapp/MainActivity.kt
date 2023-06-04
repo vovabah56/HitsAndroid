@@ -9,6 +9,7 @@ import android.os.VibratorManager
 import android.view.Menu
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
 import com.example.myapp.screens.MainScreen
 import com.example.myapp.ui.MyTheme
 
@@ -20,7 +21,6 @@ class MainActivity : ComponentActivity() {
             MyTheme {
                 MainScreen()
             }
-
         }
     }
 

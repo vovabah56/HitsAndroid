@@ -1,13 +1,16 @@
 package com.example.myapp.blocks
 
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,6 +43,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -48,13 +52,88 @@ import com.example.myapp.screens.ButtonSelectionScreen
 import com.example.myapp.R
 import com.example.myapp.screens.clickHandler
 import com.example.myapp.model.Block
+import com.example.myapp.model.DoWhileBlock
+import com.example.myapp.model.ElseBlock
+import com.example.myapp.model.ElseIfBlock
+import com.example.myapp.model.ForBlock
+import com.example.myapp.model.FunctionBlock
 import com.example.myapp.model.IfBlock
+import com.example.myapp.model.WhileBlock
 
+
+fun getNestedBlockCount(block: Block): Int {
+    var count = 0
+
+    when (block.blockType) {
+        is IfBlock -> {
+            val ifBlock = block.blockType as IfBlock
+            count += ifBlock.blocks.size
+            for (innerBlock in ifBlock.blocks) {
+                count += getNestedBlockCount(innerBlock)
+            }
+        }
+
+        is ElseIfBlock -> {
+            val elseIfBlock = block.blockType as ElseIfBlock
+            count += elseIfBlock.blocks.size
+            for (innerBlock in elseIfBlock.blocks) {
+                count += getNestedBlockCount(innerBlock)
+            }
+        }
+
+        is ElseBlock -> {
+            val elseBlock = block.blockType as ElseBlock
+            count += elseBlock.blocks.size
+            for (innerBlock in elseBlock.blocks) {
+                count += getNestedBlockCount(innerBlock)
+            }
+        }
+
+        is ForBlock -> {
+            val forBlock = block.blockType as ForBlock
+            count += forBlock.blocks.size
+            for (innerBlock in forBlock.blocks) {
+                count += getNestedBlockCount(innerBlock)
+            }
+        }
+
+        is WhileBlock -> {
+            val whileBlock = block.blockType as WhileBlock
+            count += whileBlock.blocks.size
+            for (innerBlock in whileBlock.blocks) {
+                count += getNestedBlockCount(innerBlock)
+            }
+        }
+
+        is DoWhileBlock -> {
+            val doWhileBlock = block.blockType as DoWhileBlock
+            count += doWhileBlock.blocks.size
+            for (innerBlock in doWhileBlock.blocks) {
+                count += getNestedBlockCount(innerBlock)
+            }
+        }
+
+        is FunctionBlock -> {
+            val functionBlock = block.blockType as FunctionBlock
+            count += functionBlock.blocks.size
+            for (innerBlock in functionBlock.blocks) {
+                count += getNestedBlockCount(innerBlock)
+            }
+        }
+    }
+    Log.i("totalBlocks", count.toString())
+    return count
+}
 
 @ExperimentalAnimationApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DrawIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
+fun DrawIfBlock(
+    block: Block,
+    blocksList: MutableList<Block>,
+    shiftBlock: Boolean,
+    mainBLocks: MutableList<Block> = mutableListOf()
+) {
     val blockId = if (!shiftBlock) {
         R.drawable.block
     } else {
@@ -67,7 +146,7 @@ fun DrawIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolea
             .offset(y = 110.dp)
             .height(105.dp + 110.dp * newBlocksList.size)
             .padding(start = 26.dp)
-    ) { OnShiftBlockCreate(newBlocksList) }
+    ) { OnShiftBlockCreate(newBlocksList, blocksList) }
 
     Box(contentAlignment = Alignment.CenterStart) {
 
@@ -159,7 +238,7 @@ fun DrawIfBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolea
                         expanded = !expanded
                         clickHandler(
                             buttonType = buttonType,
-                            listOfBlocks = blockType.blocks
+                            listOfBlocks = newBlocksList
                         )
                     })
                 }

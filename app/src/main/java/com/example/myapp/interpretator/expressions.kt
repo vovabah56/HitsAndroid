@@ -1,6 +1,7 @@
 package com.example.myapp.interpretator
 
 
+import com.example.myapp.model.LogData
 import com.example.myapplication.polish.PolishString
 
 fun expressionBlock(
@@ -8,7 +9,7 @@ fun expressionBlock(
     text: String,
     variables: MutableMap<String, Int>,
     arrays: MutableMap<String, MutableList<Int>>,
-    errorConsole: MutableList<String>
+    console: MutableList<LogData>
 ) {
 
     var textExpression = text
@@ -34,8 +35,7 @@ fun expressionBlock(
         }
     }
     if (textExpression.contains("\\[.*\\]".toRegex())) {
-        errorConsole.add("Error in the index array")
-        errorConsole.add("Error in the index array")
+        console.add(LogData("Error in the index array"))
 
     }
 
@@ -82,7 +82,7 @@ fun expressionBlock(
         textExpression = "\\)(?<=[0-9a-zA-Z_])".toRegex().replace(textExpression, ")*")
 
         //прогон по польской строке
-        val polString = PolishString(textExpression, variables, arrays, errorConsole)
+        val polString = PolishString(textExpression, variables, arrays, console)
 
         if (polString.isExpressionCorrect) {
             tree.add(",+".toRegex().replace(polString.expression, ","))

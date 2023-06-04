@@ -1,5 +1,6 @@
 package com.example.myapp.interpretator
 
+import android.os.SystemClock.sleep
 import android.util.Log
 
 import com.example.myapp.model.*
@@ -11,14 +12,13 @@ fun interpreter(
     blocks: MutableList<Block>,
     variables: MutableMap<String, Int>,
     arrays: MutableMap<String, MutableList<Int>>,
-    console: MutableList<String>,
-    errorConsole: MutableList<String>
+    console: MutableList<LogData>,
 ) {
     val size = blocks.size
     for (i in 0 until size) {
         when (blocks[i].blockType) {
             is VarBlock -> varBlock(
-                blocks[i].blockType as VarBlock, variables, arrays, console, errorConsole
+                blocks[i].blockType as VarBlock, variables, arrays, console
             )
 
             is IfBlock -> {
@@ -28,34 +28,33 @@ fun interpreter(
                         blocks[i + 1].blockType as ElseBlock,
                         variables,
                         arrays,
-                        console,
-                        errorConsole
+                        console
                     )
                 } else {
                     ifBlock(
-                        blocks[i].blockType as IfBlock, variables, arrays, console, errorConsole
+                        blocks[i].blockType as IfBlock, variables, arrays, console
                     )
                 }
             }
 
             is WhileBlock -> whileBlock(
-                blocks[i].blockType as WhileBlock, variables, arrays, console, errorConsole
+                blocks[i].blockType as WhileBlock, variables, arrays, console
             )
 
             is DoWhileBlock -> doWhileBlock(
-                blocks[i].blockType as DoWhileBlock, variables, arrays, console, errorConsole
+                blocks[i].blockType as DoWhileBlock, variables, arrays, console
             )
 
             is PrintBlock -> out(
-                blocks[i].blockType as PrintBlock, variables, arrays, console, errorConsole
+                blocks[i].blockType as PrintBlock, variables, arrays, console
             )
 
             is ForBlock -> forBlock(
-                blocks[i].blockType as ForBlock, variables, arrays, console, errorConsole
+                blocks[i].blockType as ForBlock, variables, arrays, console
             )
 
             is InputBlock -> inputBlock(
-                blocks[i].blockType as InputBlock, variables, arrays, console, errorConsole
+                blocks[i].blockType as InputBlock, variables, arrays, console
             )
         }
     }
@@ -65,14 +64,15 @@ fun inputBlock(
     block: InputBlock,
     variables: MutableMap<String, Int>,
     arrays: MutableMap<String, MutableList<Int>>,
-    console: MutableList<String>,
-    errorConsole: MutableList<String>
-) {
-    variables[block.name] = zaglushka()
-}
+    console: MutableList<LogData>,
 
-fun zaglushka(): Int {
-    return 0
+    ) {
+    console.add(LogData("getting value of ${block.name}"))
+    while (!console.last().log.startsWith("input ${block.name}")) {
+        Thread.sleep(100)
+    }
+    val value = console.last().log.substringAfter("input ${block.name} is ").toInt()
+    variables[block.name] = value
 }
 
 fun ifElseBlock(
@@ -80,14 +80,15 @@ fun ifElseBlock(
     blockElse: ElseBlock,
     variables: MutableMap<String, Int>,
     arrays: MutableMap<String, MutableList<Int>>,
-    console: MutableList<String>,
-    errorConsole: MutableList<String>
+    console: MutableList<LogData>,
 
-) {
-    if (blockConditions(blockIf.condition, variables, arrays, console, errorConsole)) {
-        interpreter(blockIf.blocks, variables, arrays, console, errorConsole)
+
+    ) {
+
+    if (blockConditions(blockIf.condition, variables, arrays, console)) {
+        interpreter(blockIf.blocks, variables, arrays, console)
     } else {
-        interpreter(blockElse.blocks, variables, arrays, console, errorConsole)
+        interpreter(blockElse.blocks, variables, arrays, console)
     }
 }
 
@@ -95,32 +96,34 @@ fun forBlock(
     block: ForBlock,
     variables: MutableMap<String, Int>,
     arrays: MutableMap<String, MutableList<Int>>,
-    console: MutableList<String>,
-    errorConsole: MutableList<String>
-) {
+    console: MutableList<LogData>,
+
+    ) {
     val range = block.range.split(",")
     if (range.size != 2) {
-        console.add("#Invalid array")
+        console.add(LogData("#Invalid array", true))
     }
     val first = calculatePolishString(
-        PolishString(range[0], variables, arrays, errorConsole).expression,
+        PolishString(range[0], variables, arrays, console).expression,
         variables,
         arrays,
-        errorConsole
+        console
     )
     val second = calculatePolishString(
-        PolishString(range[1], variables, arrays, errorConsole).expression,
+        PolishString(range[1], variables, arrays, console).expression,
         variables,
         arrays,
-        errorConsole
+        console
     )
-    var localMap = variables
-
+    var localMap = mutableMapOf<String, Int>()
+    for (i in variables.keys) {
+        localMap[i] = variables[i] as Int
+    }
 
     for (i in first..second) {
 
         localMap[block.variable] = i
-        interpreter(block.blocks, localMap, arrays, console, errorConsole)
+        interpreter(block.blocks, localMap, arrays, console)
     }
 
 }
@@ -130,32 +133,32 @@ fun blockConditions(
     condition: String,
     variables: MutableMap<String, Int>,
     arrays: MutableMap<String, MutableList<Int>>,
-    console: MutableList<String>,
-    errorConsole: MutableList<String>
+    console: MutableList<LogData>,
 
-): Boolean {
+
+    ): Boolean {
     var res = false
-    val arr = conditionBlock(condition, variables, arrays, errorConsole)
+    val arr = conditionBlock(condition, variables, arrays, console)
 
     if (arr[0] == "!=") {
-        if (calculatePolishString(arr[1], variables, arrays, errorConsole) != calculatePolishString(
-                arr[2], variables, arrays, errorConsole
+        if (calculatePolishString(arr[1], variables, arrays, console) != calculatePolishString(
+                arr[2], variables, arrays, console
             )
         ) {
             res = true
         }
     }
     if (arr[0] == "==") {
-        if (calculatePolishString(arr[1], variables, arrays, errorConsole) == calculatePolishString(
-                arr[2], variables, arrays, errorConsole
+        if (calculatePolishString(arr[1], variables, arrays, console) == calculatePolishString(
+                arr[2], variables, arrays, console
             )
         ) {
             res = true
         }
     }
     if (arr[0] == ">=") {
-        if (calculatePolishString(arr[1], variables, arrays, errorConsole) >= calculatePolishString(
-                arr[2], variables, arrays, errorConsole
+        if (calculatePolishString(arr[1], variables, arrays, console) >= calculatePolishString(
+                arr[2], variables, arrays, console
             )
         ) {
             res = true
@@ -163,9 +166,9 @@ fun blockConditions(
     }
     if (arr[0] == "<=") {
         if (calculatePolishString(
-                arr[1], variables, arrays, errorConsole
+                arr[1], variables, arrays, console
             ) <= calculatePolishString(
-                arr[2], variables, arrays, errorConsole
+                arr[2], variables, arrays, console
             )
         ) {
             res = true
@@ -173,9 +176,9 @@ fun blockConditions(
     }
     if (arr[0] == "<") {
         if (calculatePolishString(
-                arr[1], variables, arrays, errorConsole
+                arr[1], variables, arrays, console
             ) < calculatePolishString(
-                arr[2], variables, arrays, errorConsole
+                arr[2], variables, arrays, console
             )
         ) {
             res = true
@@ -183,8 +186,8 @@ fun blockConditions(
     }
     if (arr[0] == ">") {
         if (calculatePolishString(
-                arr[1], variables, arrays, errorConsole
-            ) > calculatePolishString(arr[2], variables, arrays, errorConsole)
+                arr[1], variables, arrays, console
+            ) > calculatePolishString(arr[2], variables, arrays, console)
         ) {
             res = true
         }
@@ -197,11 +200,15 @@ fun ifBlock(
     block: IfBlock,
     variables: MutableMap<String, Int>,
     arrays: MutableMap<String, MutableList<Int>>,
-    console: MutableList<String>,
-    errorConsole: MutableList<String>
-) {
-    if (blockConditions(block.condition, variables, arrays, console, errorConsole)) {
-        interpreter(block.blocks, variables, arrays, console, errorConsole)
+    console: MutableList<LogData>,
+
+    ) {
+    var localMap = mutableMapOf<String, Int>()
+    for (i in variables.keys) {
+        localMap[i] = variables[i] as Int
+    }
+    if (blockConditions(block.condition, variables, arrays, console)) {
+        interpreter(block.blocks, localMap, arrays, console)
     }
 }
 
@@ -209,11 +216,15 @@ fun whileBlock(
     block: WhileBlock,
     variables: MutableMap<String, Int>,
     arrays: MutableMap<String, MutableList<Int>>,
-    console: MutableList<String>,
-    errorConsole: MutableList<String>
-) {
-    while (blockConditions(block.condition, variables, arrays, console, errorConsole)) {
-        interpreter(block.blocks, variables, arrays, console, errorConsole)
+    console: MutableList<LogData>,
+
+    ) {
+    var localMap = mutableMapOf<String, Int>()
+    for (i in variables.keys) {
+        localMap[i] = variables[i] as Int
+    }
+    while (blockConditions(block.condition, variables, arrays, console)) {
+        interpreter(block.blocks, localMap, arrays, console)
     }
 }
 
@@ -222,13 +233,13 @@ fun doWhileBlock(
     block: DoWhileBlock,
     variables: MutableMap<String, Int>,
     arrays: MutableMap<String, MutableList<Int>>,
-    console: MutableList<String>,
-    errorConsole: MutableList<String>
+    console: MutableList<LogData>,
 
-) {
-    interpreter(block.blocks, variables, arrays, console, errorConsole)
-    while (blockConditions(block.condition, variables, arrays, console, errorConsole)) {
-        interpreter(block.blocks, variables, arrays, console, errorConsole)
+
+    ) {
+    interpreter(block.blocks, variables, arrays, console)
+    while (blockConditions(block.condition, variables, arrays, console)) {
+        interpreter(block.blocks, variables, arrays, console)
     }
 }
 
@@ -236,8 +247,7 @@ fun varBlock(
     block: VarBlock,
     variables: MutableMap<String, Int>,
     arrays: MutableMap<String, MutableList<Int>>,
-    console: MutableList<String>,
-    errorConsole: MutableList<String>
+    console: MutableList<LogData>,
 ) {
     if ("," in block.value && "[" in block.value && "]" in block.value) {
         val str = block.value.replace("[", "").replace("]", "")
@@ -256,25 +266,25 @@ fun varBlock(
         val name = str[0]
         val index = str[1].replace("]", "")
         val ind = calculatePolishString(
-            PolishString(index, variables, arrays, errorConsole).expression,
+            PolishString(index, variables, arrays, console).expression,
             variables,
             arrays,
-            errorConsole
+            console
         )
         arrays[name]?.set(
             ind, calculatePolishString(
-                PolishString(block.value, variables, arrays, errorConsole).expression,
+                PolishString(block.value, variables, arrays, console).expression,
                 variables,
                 arrays,
-                errorConsole
+                console
             )
         )
     } else {
         variables[block.name] = calculatePolishString(
-            PolishString(block.value, variables, arrays, errorConsole).expression,
+            PolishString(block.value, variables, arrays, console).expression,
             variables,
             arrays,
-            errorConsole
+            console
         )
     }
 }
@@ -284,23 +294,24 @@ fun out(
     block: PrintBlock,
     variables: MutableMap<String, Int>,
     arrays: MutableMap<String, MutableList<Int>>,
-    console: MutableList<String>,
-    errorConsole: MutableList<String>
-) {
+    console: MutableList<LogData>,
+
+    ) {
     console.add(
-        calculatePolishString(
-            PolishString(block.value, variables, arrays, errorConsole).expression,
-            variables,
-            arrays,
-            errorConsole
-        ).toString()
+        LogData(
+            calculatePolishString(
+                PolishString(block.value, variables, arrays, console).expression,
+                variables,
+                arrays, console
+            ).toString()
+        )
     )
-    Log.d(
-        "asas", calculatePolishString(
-            PolishString(block.value, variables, arrays, errorConsole).expression,
-            variables,
-            arrays,
-            errorConsole
-        ).toString()
-    )
+//    Log.d(
+//        "asas", calculatePolishString(
+//            PolishString(block.value, variables, arrays, console).expression,
+//            variables,
+//            arrays,
+//            console
+//        ).toString()
+//    )
 }

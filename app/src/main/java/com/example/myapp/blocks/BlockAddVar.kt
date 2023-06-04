@@ -1,5 +1,6 @@
 package com.example.myapp.blocks
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -27,13 +28,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.myapp.R
 import com.example.myapp.model.Block
 import com.example.myapp.model.VarBlock
+import com.example.myapp.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DrawVariableBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: Boolean) {
+fun DrawVariableBlock(
+    block: Block,
+    blocksList: MutableList<Block>,
+    shiftBlock: Boolean,
+) {
     val blockType = block.blockType as VarBlock
     val blockId = if (!shiftBlock) {
         R.drawable.block
@@ -140,10 +145,18 @@ fun DrawVariableBlock(block: Block, blocksList: MutableList<Block>, shiftBlock: 
             ) {
                 TextButton(
                     onClick = {
+                        for (b in blocksList) {
+                            Log.i("Shift block delete", b.toString())
+                        }
+
                         variable.value = ""
                         varValue.value = ""
                         blocksList.remove(block)
-                    },
+                        if (shiftBlock) {
+                            blocksList.add(Block(10000, VarBlock("", "")))
+                            blocksList.remove(Block(10000, VarBlock("", "")))
+                        }
+                    }
                 ) {
                     Text("×", fontSize = 20.sp, color = Color.White)
                 }

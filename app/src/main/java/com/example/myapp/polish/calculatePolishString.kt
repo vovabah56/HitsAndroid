@@ -1,17 +1,23 @@
 package com.example.myapplication.polish
 
 
+import com.example.myapp.model.LogData
 import java.lang.Exception
 import java.util.Stack
 
 
-fun calculatePolishString(polishString: String, variables: MutableMap<String, Int>, arrays: MutableMap<String, MutableList<Int>>,errorConsole: MutableList<String>): Int {
+fun calculatePolishString(
+    polishString: String,
+    variables: MutableMap<String, Int>,
+    arrays: MutableMap<String, MutableList<Int>>,
+    console: MutableList<LogData>
+): Int {
     val stack = Stack<Int>()
     var localPolishString = polishString
 
     val regex = Regex("[a-zA-Z_][a-zA-Z_0-9]*")
     val matches = regex.findAll(polishString)
-    for (key in matches){
+    for (key in matches) {
         if (!variables.containsKey(key.value)) {
             print("#Invalid expression: ${key.value}")
             return 0
@@ -34,37 +40,40 @@ fun calculatePolishString(polishString: String, variables: MutableMap<String, In
                     "+" -> {
                         if (stack.size < 2) {
                             print("#Invalid expression: stack")
-                            errorConsole.add("#Invalid expression: stack")
+                            console.add(LogData("#Invalid expression: stack", true))
                             return 0
                         }
                         val second = stack.pop()
                         val first = stack.pop()
                         stack.push(first + second)
                     }
+
                     "-" -> {
                         if (stack.size < 2) {
                             print("#Invalid expression: stack")
-                            errorConsole.add("#Invalid expression: stack")
+                            console.add(LogData("#Invalid expression: stack", true))
                             return 0
                         }
                         val second = stack.pop()
                         val first = stack.pop()
                         stack.push(first - second)
                     }
+
                     "*" -> {
                         if (stack.size < 2) {
                             print("#Invalid expression: stack")
-                            errorConsole.add("#Invalid expression: stack")
+                            console.add(LogData("#Invalid expression: stack", true))
                             return 0
                         }
                         val second = stack.pop()
                         val first = stack.pop()
                         stack.push(first * second)
                     }
+
                     "/" -> {
                         if (stack.size < 2) {
                             print("#Invalid expression: stack")
-                            errorConsole.add("#Invalid expression: stack")
+                            console.add(LogData("#Invalid expression: stack", true))
                             return 0
                         }
                         val second = stack.pop()
@@ -75,33 +84,36 @@ fun calculatePolishString(polishString: String, variables: MutableMap<String, In
                         }
                         stack.push(first / second)
                     }
+
                     "%" -> {
                         if (stack.size < 2) {
                             print("#Invalid expression: stack")
-                            errorConsole.add("#Invalid expression: stack")
+                            console.add(LogData("#Invalid expression: stack", true))
                             return 0
                         }
                         val second = stack.pop()
                         val first = stack.pop()
                         if (second == 0) {
-                            errorConsole.add("#Devision by 0")
+                            console.add(LogData("#Devision by 0"))
                             return 0
                         }
                         stack.push(first % second)
                     }
+
                     "(" -> {
                         stack.push(-1)
                     }
+
                     ")" -> {
                         if (stack.size < 3) {
                             print("#Invalid expression: stack")
-                            errorConsole.add("#Invalid expression: stack")
+                            console.add(LogData("#Invalid expression: stack", true))
                             return 0
                         }
                         val third = stack.pop()
                         if (third != -1) {
                             print("#Invalid expression: stack")
-                            errorConsole.add("#Invalid expression: stack")
+                            console.add(LogData("#Invalid expression: stack", true))
                             return 0
                         }
                         val result = com.example.myapp.polish.calculatePolishString(

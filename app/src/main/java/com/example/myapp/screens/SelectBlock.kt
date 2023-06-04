@@ -13,8 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.myapp.R
 
 enum class ButtonType {
     Variable,
@@ -79,11 +81,16 @@ fun ButtonSelectionScreen(
                                     .fillMaxWidth()
                                     .background(Color.Transparent)
                                     .padding(vertical = 8.dp)
-                                    .clickable { }
+                                    .clickable { },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.secondary,
+                                    contentColor = Color.White,
+                                ),
+                                shape = MaterialTheme.shapes.medium
                             ) {
                                 Text(
                                     text = buttonItem.type.name,
-                                    style = MaterialTheme.typography.labelSmall,
+                                    style = MaterialTheme.typography.labelLarge,
                                     color = Color.White
                                 )
                             }
